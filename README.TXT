@@ -24,6 +24,7 @@ java LifeGame
 
 
 # Fixed/History
+# 2011 Nov 17 fixed privileges on github  friday-programming/life
 # 2011 Oct 21
 [x]brought in Gavin's speed slider and processing thread
 
