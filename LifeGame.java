@@ -122,7 +122,7 @@ public class LifeGame extends JApplet /* was Applet */ {
     }
     
     public void changeCellVal(int x, int y){
-        
+        theBoard
     }
 
     /**
