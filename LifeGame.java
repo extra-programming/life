@@ -112,17 +112,13 @@ public class LifeGame extends JApplet /* was Applet */ {
         this.buildGUI( );
     } // init( )
 
-    public boolean validBoardCoordinates(int x,int y){
-        if(x>=boardMinX&&x<boardMaxX&&y>boardMinY&&y<boardMaxY) return true;
-        return false;
-    }
     
     public int getBoardX(int x){
-        
+        return x;
     }
     
     public int getBoardY(int y){
-        
+        return y;
     }
     
     public void changeCellVal(int x, int y){
@@ -179,7 +175,8 @@ public class LifeGame extends JApplet /* was Applet */ {
             public void mouseClicked(MouseEvent e){
                 int x = e.getX(), y = e.getY();
                 System.out.println("mouse clicked on "+x+", "+y);
-                if(validBoardCoordinates(x,y)) changeCellVal(getBoardX(x),getBoardY(y));
+                int bx=getBoardX(x), by=getBoardY(y);
+                if(bx!=-1&&by!=-1) changeCellVal(getBoardX(x),getBoardY(y));
             }
         });
         

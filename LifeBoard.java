@@ -136,7 +136,7 @@ class LifeBoard extends JPanel implements MouseListener {
 		if ( badLoc( clickLoc) ) {
 			return badPoint;
 		}
-		
+		return null;
 	} /* whichCell( ) */
 
 
@@ -150,6 +150,7 @@ class LifeBoard extends JPanel implements MouseListener {
 		if ( (clickLoc.y < 0 ) || (clickLoc.y >  wholePictureHeight)) { 
 			return false;
 		}
+		return true;
 	} /* badLoc( ) */
 
 
