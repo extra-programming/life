@@ -214,11 +214,7 @@ class LifeBoard extends JPanel implements MouseListener {
 	 * Will really have to change if we use a class to represent cell values!
 	 */
 	public boolean badCellValue( int theValue ) {
-	    if (( theValue < minLifeCellValue ) || ( theValue > maxLifeCellValue)) {
-	        return false;
-	       } else {
-	           return true;
-	       }
+        return (( theValue < minLifeCellValue ) || ( theValue > maxLifeCellValue));
     } 
 	   
 
@@ -229,12 +225,12 @@ class LifeBoard extends JPanel implements MouseListener {
 	*/
 	boolean badGraphicLoc( Point clickLoc ) {
 		if ( (clickLoc.x < 0 ) || (clickLoc.x >  wholePictureWidth)) { 
-			return false;
+			return true;
 		}
 		if ( (clickLoc.y < 0 ) || (clickLoc.y >  wholePictureHeight)) { 
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	} /* badLoc( ) */
 	
 	
@@ -245,10 +241,13 @@ class LifeBoard extends JPanel implements MouseListener {
 	* Note: beware the OBOB. An array size 3 has cells 0,1,2 so error if x >= 3, not just x>3!
 	*/
 	boolean badGridLoc( Point gridLoc ) {
-		if ( (gridLoc.x < 0 ) || (gridLoc.x >= cellsAcross) ||  (gridLoc.y < 0 ) || (gridLoc.y >= cellsDown) ) { 
-			return false;
+		if ( (gridLoc.x < 0 ) || (gridLoc.x >= cellsAcross ) ) {
+		    return true;
 		}
-		return true;
+		if ( (gridLoc.y < 0 ) || (gridLoc.y >= cellsDown) ) { 
+			return true;
+		}
+		return false;
 	} /* badLoc( ) */
 
 

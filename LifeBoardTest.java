@@ -54,6 +54,7 @@ public class LifeBoardTest
     public void instantiate()
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
+        assertEquals(false, lifeBoar1.equals(null));
         assertEquals(2, lifeBoar1.getCellsAcross());
         assertEquals(3, lifeBoar1.getCellsDown());
     }
@@ -64,9 +65,26 @@ public class LifeBoardTest
     public void boardsize()
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
-        assertEquals(false, lifeBoar1.badGridLoc(new java.awt.Point(1,1)));
+        assertEquals(false, lifeBoar1.badGridLoc(new java.awt.Point(0,1)));
+        assertEquals(false, lifeBoar1.badGridLoc(new java.awt.Point(0,0)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(-1,1)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,-1)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,3)));
+    }
+
+    @Test
+    public void instance0()
+    {
+        LifeBoard lifeBoar1 = new LifeBoard(0, 0);
+        assertEquals(false, lifeBoar1.equals(null));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(0,1)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(0,0)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(-1,1)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,-1)));
+        assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,3)));
     }
 }
+
 
 
  // class LifeBoardTest
