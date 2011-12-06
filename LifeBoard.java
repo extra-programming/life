@@ -25,8 +25,8 @@ class LifeBoard extends JPanel implements MouseListener {
    */
 
     private static final long serialVersionUID = 42L;  // makes serializable happy
-    int cellsAcross = 20;
-    int cellsDown = 20;
+    private int cellsAcross = 20;
+    private int cellsDown = 20;
 
     int cellWidth = 8;
     int cellHeight = 8;
@@ -41,6 +41,8 @@ class LifeBoard extends JPanel implements MouseListener {
     final int /*boolean*/ ALIVE2 = 2/*true*/;
     final int /*boolean*/ ALIVE1 = 1/*true*/;
     final int /*boolean*/ DEAD = 0/*false*/;
+    final int maxLifeCellValue = 2;
+    final int minLifeCellValue = 0;
 
     final Color alive2Color = Color.black;
     final Color alive1Color = Color.red;
@@ -104,24 +106,90 @@ class LifeBoard extends JPanel implements MouseListener {
        // e.getClickCount(), e);
     }
 
+    
     public void mouseReleased(MouseEvent e) {
        // e.getClickCount(), e);
     }
 
+    
     public void mouseEntered(MouseEvent e) {
        // saySomething("Mouse entered", e);
     }
 
+    
     public void mouseExited(MouseEvent e) {
        // saySomething("Mouse exited", e);
     }
 
+    
     public void mouseClicked(MouseEvent e) {
        // e.getClickCount() + ")", e);
        Point whereClicked = e.getPoint( );
        System.out.println("Click at (local):" + whereClicked);
     } /* mouseClicked( ) */
 
+    
+    
+    /**
+     * 
+     */
+    public int getCellsAcross( ) {
+        return cellsAcross;
+    }
+    
+    
+    /**
+     * 
+     */
+    public int getCellsDown( ) {
+        return cellsDown;
+    }
+    
+    
+    /**
+     * Given a Point representing the [x],[y] loc of the cell in the grid
+     * tell us the value in that cell.
+     * Note: the Point is NOT screenloc in pixels!
+     * Throw exception if given a bad location that doesn't exist on the grid.
+     * Note: ArrayIndexOutOfBoundsException is an "unchecked" exception, meaning
+     * you don't have to specify that you throw it, and callers don't have to
+     * worry about catching it.
+     */
+    public int getCellData( Point cellLoc ) throws ArrayIndexOutOfBoundsException {
+        if ( badGridLoc( cellLoc) ) {
+            throw new ArrayIndexOutOfBoundsException("bad gridloc " + cellLoc + " in grid with width=" + cellsAcross + ", height=" + cellsDown);
+			//return badPoint;
+		} else {
+		    return theData[cellLoc.x][cellLoc.y];
+		}
+    } // getCellData( )
+    
+    
+    /**
+     * Given a Point representing the [x],[y] loc of the cell in the grid
+     * and a legit cell data value, put the value into that cell.
+     * Note: the Point is NOT screenloc in pixels!
+     * 
+     * ?? What to do if given bad (non-conway) cell value? Ignore it? Throw Exception?
+     * 
+     * Throw exception if given a bad location that doesn't exist on the grid.
+     * Note: ArrayIndexOutOfBoundsException is an "unchecked" exception, meaning
+     * you don't have to specify that you throw it, and callers don't have to
+     * worry about catching it.
+     */
+    public void setCellData( Point cellLoc, int newCellValue ) throws ArrayIndexOutOfBoundsException {
+        if ( badGridLoc( cellLoc) ) {
+            throw new ArrayIndexOutOfBoundsException("bad gridloc " + cellLoc + " in grid with width=" + cellsAcross + ", height=" + cellsDown);
+		}
+		if (badCellValue( newCellValue )) {
+		    
+        } else {
+            // if  (theData[cellLoc.x][cellLoc.y] != newCellValue) {
+		   theData[cellLoc.x][cellLoc.y] = newCellValue;
+		   // }
+		}
+    } // setCellData( )
+    
 
 	/**
 	* Given a Point representing screenloc in pixels (over,down),
@@ -133,21 +201,51 @@ class LifeBoard extends JPanel implements MouseListener {
 		myg.fillOval( /* left edge.. leftMargin + (x * cellWidth),
                               /* top edge..  topMargin + (y * cellHeight), 
                                 cellWidth, cellHeight ); */
-		if ( badLoc( clickLoc) ) {
+		if ( badGraphicLoc( clickLoc) ) {
 			return badPoint;
 		}
 		return null;
 	} /* whichCell( ) */
 
+	
+	/**
+	 * Use this to check if a grid cell is being given a legit value.
+	 * This has to change if we allow different values, duh!
+	 * Will really have to change if we use a class to represent cell values!
+	 */
+	public boolean badCellValue( int theValue ) {
+	    if (( theValue < minLifeCellValue ) || ( theValue > maxLifeCellValue)) {
+	        return false;
+	       } else {
+	           return true;
+	       }
+    } 
+	   
 
 	/**
-	* 
+	* Tells us if these screenloc pixel coordinates are out of bounds.
+	* Note: this is different from gridloc coordinates which speak in
+	* terms of [x],[y] loc of cells in the data grid!
 	*/
-	boolean badLoc( Point clickLoc ) {
+	boolean badGraphicLoc( Point clickLoc ) {
 		if ( (clickLoc.x < 0 ) || (clickLoc.x >  wholePictureWidth)) { 
 			return false;
 		}
 		if ( (clickLoc.y < 0 ) || (clickLoc.y >  wholePictureHeight)) { 
+			return false;
+		}
+		return true;
+	} /* badLoc( ) */
+	
+	
+	/**
+	* Tells us if this  [x],[y] loc of cells in the data grid is out of bounds.
+	* Note: this is different from graphicloc coordinates which speak in
+	* terms of screenloc pixel coordinates!
+	* Note: beware the OBOB. An array size 3 has cells 0,1,2 so error if x >= 3, not just x>3!
+	*/
+	boolean badGridLoc( Point gridLoc ) {
+		if ( (gridLoc.x < 0 ) || (gridLoc.x >= cellsAcross) ||  (gridLoc.y < 0 ) || (gridLoc.y >= cellsDown) ) { 
 			return false;
 		}
 		return true;
