@@ -1,9 +1,9 @@
 
 
-import static org.junit.Assert.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+//import static org.junit.Assert.*;
+//import org.junit.After;
+//import org.junit.Before;
+//import org.junit.Test;
 
 /**
  * The test class LifeBoardTest.
@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author  (Mike Roam)
  * @version (a version number or a date)
  */
-public class LifeBoardTest
+public class LifeBoardTest extends junit.framework.TestCase
 {
     /**
      * Default constructor for test class LifeBoardTest
@@ -26,7 +26,7 @@ public class LifeBoardTest
      *
      * Called before every test case method.
      */
-    @Before
+    //@Before
     public void setUp()
     {
     }
@@ -37,20 +37,20 @@ public class LifeBoardTest
      *
      * Called after every test case method.
      */
-    @After
+    //@After
     public void tearDown()
     {
     }
     
 
-    @Test
+    //@Test
     public void t1()
     {
         LifeBoard lifeBoard10x10 = new LifeBoard(10, 10);
     }
     
 
-    @Test
+    //@Test
     public void instantiate()
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
@@ -61,7 +61,7 @@ public class LifeBoardTest
 
     
 
-    @Test
+    //@Test
     public void boardsize()
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
@@ -72,7 +72,7 @@ public class LifeBoardTest
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,3)));
     }
 
-    @Test
+
     public void instance0()
     {
         LifeBoard lifeBoar1 = new LifeBoard(0, 0);
@@ -83,7 +83,15 @@ public class LifeBoardTest
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,-1)));
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,3)));
     }
+
+	public void test1a()
+	{
+		LifeBoard lifeBoar1 = new LifeBoard(2, 3);
+		assertEquals(2, lifeBoar1.getCellsAcross());
+		assertEquals(3, lifeBoar1.getCellsDown());
+	}
 }
+
 
 
 
