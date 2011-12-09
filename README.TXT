@@ -15,11 +15,16 @@ java LifeGame
 # The version with listeners does not need to mention the LifeGame$1 etc.
 
 
+# Bugs...
+[ ]get neighborcount is giving bad results in small world: perhaps the toroidal counting
+
+
 # Current issues...
 [ ]Gets ugly layout after reading in a scenario from a file. Resize by hand to fix.
 
 
 # Future Plans:
+[ ]see Golly in reaktor which plays life game as sine wave synthesizer
 # [ ]Click to draw/erase cells.
 
 

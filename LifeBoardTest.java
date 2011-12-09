@@ -43,15 +43,15 @@ public class LifeBoardTest extends junit.framework.TestCase
     }
     
 
-    //@Test
-    public void t1()
+
+    public void test1()
     {
         LifeBoard lifeBoard10x10 = new LifeBoard(10, 10);
     }
     
 
-    //@Test
-    public void instantiate()
+
+    public void testInstantiate()
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
         assertEquals(false, lifeBoar1.equals(null));
@@ -62,7 +62,7 @@ public class LifeBoardTest extends junit.framework.TestCase
     
 
     //@Test
-    public void boardsize()
+    public void testBoardsize()
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
         assertEquals(false, lifeBoar1.badGridLoc(new java.awt.Point(0,1)));
@@ -73,10 +73,10 @@ public class LifeBoardTest extends junit.framework.TestCase
     }
 
 
-    public void instance0()
+    public void testInstance0()
     {
         LifeBoard lifeBoar1 = new LifeBoard(0, 0);
-        assertEquals(false, lifeBoar1.equals(null));
+        assertEquals(false, lifeBoar1==null);
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(0,1)));
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(0,0)));
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(-1,1)));
@@ -84,13 +84,57 @@ public class LifeBoardTest extends junit.framework.TestCase
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(1,3)));
     }
 
-	public void test1a()
-	{
-		LifeBoard lifeBoar1 = new LifeBoard(2, 3);
-		assertEquals(2, lifeBoar1.getCellsAcross());
-		assertEquals(3, lifeBoar1.getCellsDown());
-	}
+    public void test1a()
+    {
+        LifeBoard lifeBoar1 = new LifeBoard(2, 3);
+        assertEquals(2, lifeBoar1.getCellsAcross());
+        assertEquals(3, lifeBoar1.getCellsDown());
+    }
+
+    
+    public void testNegativeBoardSize()
+    {
+        // oops, brutal: perhaps do try catch
+        String errStr=null;
+        try{
+            new LifeBoard(1,-7);
+        }catch(java.lang.ArrayIndexOutOfBoundsException e){
+            errStr=e.toString();
+        }
+        assertEquals(true, errStr!=null);
+        errStr=null;
+        try{
+            new LifeBoard(-3,4);
+        }catch(java.lang.ArrayIndexOutOfBoundsException e){
+            errStr=e.toString();
+        }
+        assertEquals(true,   errStr!=null);
+    }
+    
+    
+    public void testAutumn()
+    {
+        LifeBoard lifeBoar1 = new LifeBoard(4, 4);
+        assertEquals(0, lifeBoar1.getCellData(new java.awt.Point(1,1)));
+    }
+    
+    
+    public void testCellDataSetGetAndNeighborCount()
+    {
+        LifeBoard lifeBoar1 = new LifeBoard(2, 3);
+        lifeBoar1.setCellData(new java.awt.Point(1,2), 1);
+        assertEquals(1, lifeBoar1.getCellData(new java.awt.Point(1,2)));
+        assertEquals(0, lifeBoar1.neighborCount(1, 2));
+        assertEquals(0, lifeBoar1.getCellData(new java.awt.Point(1,1)));
+        lifeBoar1.getCellsAcross();
+        lifeBoar1.getCellsDown();
+    }
+
+    
 }
+
+
+
 
 
 

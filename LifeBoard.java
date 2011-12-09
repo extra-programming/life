@@ -60,11 +60,18 @@ class LifeBoard extends JPanel implements MouseListener {
     * Creates a new board, loads it with random dots
     * ??( perhaps could get dots from a file!?)
     */
-    LifeBoard( int newCellsAcross, int newCellsDown ) {
+    LifeBoard( int newCellsAcross, int newCellsDown ) throws ArrayIndexOutOfBoundsException {
         super();
         setBackground( Color.GRAY );
         setOpaque(true);
         setBorder(BorderFactory.createLineBorder(Color.black));
+        
+        if (newCellsAcross < 0) {
+            throw new ArrayIndexOutOfBoundsException("bad grid width " + newCellsAcross);
+        }
+        if (newCellsDown < 0) {
+            throw new ArrayIndexOutOfBoundsException("bad grid height " + newCellsDown);
+        }
 
         cellsAcross = newCellsAcross;
         cellsDown = newCellsDown;
