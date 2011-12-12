@@ -24,6 +24,7 @@ java LifeGame
 
 
 # Future Plans:
+[ ]for bad arguments might use   		throw new IllegalArgumentException( "bad argument X=" + X ); 
 [ ]see Golly in reaktor which plays life game as sine wave synthesizer
 # [ ]Click to draw/erase cells.
 
