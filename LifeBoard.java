@@ -16,13 +16,13 @@ import java.io.*; /* provides "File" class */
  * @author (Mike Roam) 
  * @version (2011 Oct 14, revised to use ints instead of booleans on the lifeboard)
  */
-class LifeBoard extends JPanel implements MouseListener { 
-/* Note: there's no such thing as JCanvas in Java 1.6 API 
-   and advice online is to use JPanels and override their paintComponent( ) method,
-   NOT overriding paint( ) like we used to do in awt.
+class LifeBoard extends JPanel implements MouseListener {
+    /* Note: there's no such thing as JCanvas in Java 1.6 API 
+    and advice online is to use JPanels and override their paintComponent( ) method,
+    NOT overriding paint( ) like we used to do in awt.
    
-   see <a href="http://www.oracle.com/technetwork/java/painting-140037.html">http://www.oracle.com/technetwork/java/painting-140037.html</a>
-   */
+    see <a href="http://www.oracle.com/technetwork/java/painting-140037.html">http://www.oracle.com/technetwork/java/painting-140037.html</a>
+    */
 
     private static final long serialVersionUID = 42L;  // makes serializable happy
     private int cellsAcross = 20;
@@ -38,15 +38,17 @@ class LifeBoard extends JPanel implements MouseListener {
     int wholePictureHeight = 300;
     Dimension minSize = new Dimension(wholePictureWidth, wholePictureHeight);
   
-    final int /*boolean*/ ALIVE2 = 2/*true*/;
-    final int /*boolean*/ ALIVE1 = 1/*true*/;
-    final int /*boolean*/ DEAD = 0/*false*/;
-    final int maxLifeCellValue = 2;
-    final int minLifeCellValue = 0;
+    //final int /*boolean*/ ALIVE2 = 2/*true*/;
+    //final int /*boolean*/ ALIVE1 = 1/*true*/;
+    //final int /*boolean*/ DEAD = 0/*false*/;             obselete now it uses a Rules class
+    //final int maxLifeCellValue = 2;
+    //final int minLifeCellValue = 0;
 
     final Color alive2Color = Color.black;
     final Color alive1Color = Color.red;
     final Color deadColor = Color.white;
+    
+    final Rules theRules = new OurRules();
     
     /* two-dimensional array of ALIVE1 or ALIVE2 or DEAD*/ 
     int/*boolean*/[][] theData = null;
@@ -80,13 +82,14 @@ class LifeBoard extends JPanel implements MouseListener {
         newData = new int /*boolean*/ [ cellsAcross ] [ cellsDown ];
         for ( int x = 0; x < cellsAcross; ++x ) {
             for ( int y = 0; y < cellsDown; ++y ) {
-                if ( (myNRG.nextInt() % 3) == 1 ) {
+                /*if ( (myNRG.nextInt() % 3) == 1 ) {
                     theData[x][y] = ALIVE1;
                 } else if ( (myNRG.nextInt() % 3) == 2 ) {
                     theData[x][y] = ALIVE2;
                 } else {
                     theData[x][y] = DEAD;
-                } 
+                } */
+                theData[x][y] = theRules.acceptableCellStates()[myNRG.nextInt(theRules.acceptableCellStates().length)];
             } // for y
         } // for x
         addMouseListener(this);
@@ -221,7 +224,12 @@ class LifeBoard extends JPanel implements MouseListener {
 	 * Will really have to change if we use a class to represent cell values!
 	 */
 	public boolean badCellValue( int theValue ) {
-        return (( theValue < minLifeCellValue ) || ( theValue > maxLifeCellValue));
+	    int[] states=theRules.acceptableCellStates();
+	    for(int i=0;i<states.length;i++){
+	        if(theValue==states[i]) return true;
+	    }
+	    return false;
+        //return (( theValue < minLifeCellValue ) || ( theValue > maxLifeCellValue));
     } 
 	   
 
@@ -285,13 +293,14 @@ class LifeBoard extends JPanel implements MouseListener {
     public void fullDraw( Graphics myg ) {
         for ( int x = 0; x < cellsAcross; ++x ) {
             for ( int y = 0; y < cellsDown; ++y ) {
-                if ( theData[x][y] == ALIVE2 ) {
+                /*if ( theData[x][y] == ALIVE2 ) {
                     myg.setColor( alive2Color );
                 } else if ( theData[x][y] == ALIVE1 ) {
                     myg.setColor( alive1Color );
                 } else{
                     myg.setColor( deadColor );
-                };
+                };*/
+                myg.setColor(theRules.cellColor(theData[x][y]));
                 myg.fillOval( /* left edge */ leftMargin + (x * cellWidth),
                               /* top edge */  topMargin + (y * cellHeight), 
                                 cellWidth, cellHeight );
@@ -309,13 +318,14 @@ class LifeBoard extends JPanel implements MouseListener {
         for ( int x = 0; x < cellsAcross; ++x ) {
             for ( int y = 0; y < cellsDown; ++y ) {
                 if ( theData[x][y] != newData[x][y] ) {
-                    if ( theData[x][y] == ALIVE2 ) {
+                    /*if ( theData[x][y] == ALIVE2 ) {
                         myg.setColor( alive2Color );
                     } else if ( theData[x][y] == ALIVE1 ) {
                         myg.setColor( alive1Color );
                     } else {
                         myg.setColor( deadColor );
-                    };
+                    };*/
+                    myg.setColor(theRules.cellColor(theData[x][y]));
                     myg.fillOval( /* left: */ leftMargin + (x * cellWidth),
                                 /* top: */ topMargin + (y * cellHeight), 
                                 /* width: */    cellWidth,
@@ -336,8 +346,8 @@ class LifeBoard extends JPanel implements MouseListener {
         for ( int x = 0; x < cellsAcross; ++x ) {
             for ( int y = 0; y < cellsDown; ++y ) {
                 int numOfNeighbors = neighborCount( x, y );
-                if ( theData[x][y] == ALIVE1 ) {
-                    if (numOfNeighbors == 2) /* || numOfNeighbors == 3)) */ {
+                /*if ( theData[x][y] == ALIVE1 ) {
+                    if (numOfNeighbors == 2)  {
                         newData[x][y] = ALIVE2;
                     } else if (numOfNeighbors == 3) {
                         newData[x][y] = ALIVE1;
@@ -345,7 +355,7 @@ class LifeBoard extends JPanel implements MouseListener {
                         newData[x][y] = DEAD;
                     }
                 } else if ( theData[x][y] == ALIVE2 ) {
-                    if (numOfNeighbors == 2)/* || (numOfNeighbors == 3) )*/ {
+                    if (numOfNeighbors == 2) {
                         newData[x][y] = ALIVE1;
                     } else if (numOfNeighbors == 3) {
                         newData[x][y] = ALIVE2;
@@ -358,7 +368,8 @@ class LifeBoard extends JPanel implements MouseListener {
                     } else {
                         newData[x][y] = DEAD;
                     }
-                }
+                }*/
+                newData[x][y] = theRules.cellState(theData[x][y],numOfNeighbors);
             } // for y
         } // for x 
         // now swap the pointers to the boards;;
@@ -383,15 +394,17 @@ class LifeBoard extends JPanel implements MouseListener {
                 since -1 % 6 = -1 !!!!! */;
                 int xiloc = (x + cellsAcross + xi) % cellsAcross;
                 int yiloc = (y + cellsDown + yi) % cellsDown;
-                if (( theData[xiloc][yiloc] == ALIVE1 ) ||  ( theData[xiloc][yiloc] == ALIVE2 )) {
+                /*if (( theData[xiloc][yiloc] == ALIVE1 ) ||  ( theData[xiloc][yiloc] == ALIVE2 )) {
                     ++totalNeighbors;
-                }
+                }*/
+                totalNeighbors+=theRules.neighborValue(theData[xiloc][yiloc]);
             }
         }
         // don't count yourself!;
-        if (( theData[x][y] == ALIVE1) || ( theData[x][y] == ALIVE2 )) {
+        /*if (( theData[x][y] == ALIVE1) || ( theData[x][y] == ALIVE2 )) {
             --totalNeighbors;
-        };
+        };*/
+        totalNeighbors-=theRules.neighborValue(theData[x][y]);
         return totalNeighbors;
     } // neighborCount( )
 
@@ -402,7 +415,7 @@ class LifeBoard extends JPanel implements MouseListener {
     */
     void getBoardFromFile( Component theFrame ) {
             /* get board from a file! 
-        File Format: life 8 8 \n":...AAA..\n:...AAA..."
+        File Format: life 8 8 \n":...AAA..\n:...AAA..."                       with rules file format is '.' for dead, number for state
         info: starts with word "life" and space and width and space and 
         height AND SPACE
         then the data, line by line, each line starting with colon,
@@ -437,13 +450,15 @@ class LifeBoard extends JPanel implements MouseListener {
                 /* each line starts with : */;
                 whereDataIs = 1 + myString.indexOf( ':', whereDataIs );
                 for ( int x = 0; x < cellsAcross; ++x ) {
-                    if ( (myString.charAt( whereDataIs )) == '.' ) {
+                    /*if ( (myString.charAt( whereDataIs )) == '.' ) {
                         theData[x][y] = DEAD;
                     } else if ( (myString.charAt( whereDataIs )) == 'A' ) {
                         theData[x][y] = ALIVE1;
                     } else {
                         theData[x][y] = ALIVE2;
-                    }
+                    }*/
+                    if((myString.charAt( whereDataIs )) == '.') theData[x][y] = 0;
+                    else theData[x][y] = (int)(myString.charAt( whereDataIs )) - (int)'0';
                     ++whereDataIs;
                 }
             }
@@ -461,13 +476,15 @@ class LifeBoard extends JPanel implements MouseListener {
         StringBuffer mySB = new StringBuffer( (cellsAcross + 1) * cellsDown );
         for ( int y = 0; y < cellsDown; ++y ) {
             for ( int x = 0; x < cellsAcross; ++x ) {
-                if ( theData[x][y] == ALIVE1 ) {
+                /*if ( theData[x][y] == ALIVE1 ) {
                     mySB.append( 'A' );
                 } else if ( theData[x][y] == ALIVE2 ) {
                     mySB.append( '2' );
                 } else {
                     mySB.append( '.' );
-                };
+                };*/
+                if(theData[x][y] == 0) mySB.append('.');
+                else mySB.append(theData[x][y]);
             };
             mySB.append( '\n' );
         };

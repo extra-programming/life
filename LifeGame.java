@@ -16,7 +16,7 @@ import java.io.*;
 import java.applet.*;
 
 /**
- * @author Mike Roam
+ * @author Mike Roam et al.
  */
 public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
@@ -74,6 +74,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         frame.setSize( FRAMEWIDTH, FRAMEHEIGHT );
         // myLifeGame.init( ); the constructor calls init!
         myLifeGame.start( ); // what's this??
+        frame.pack();
         frame.setVisible(true);
     } // main( )
 
