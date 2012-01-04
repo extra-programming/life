@@ -457,8 +457,13 @@ class LifeBoard extends JPanel implements MouseListener {
                     } else {
                         theData[x][y] = ALIVE2;
                     }*/
-                    if((myString.charAt( whereDataIs )) == '.') theData[x][y] = 0;
-                    else theData[x][y] = (int)(myString.charAt( whereDataIs )) - (int)'0';
+                    int curData=0;
+                    try{
+                        curData = charToIntFromFile(myString.charAt( whereDataIs ));
+                    }catch(IllegalArgumentException iae){
+                        throw new FileFormatException(iae);
+                    }
+                    if(badCellValue(curData)) throw new FileFormatException(curData+" is not a valid cell datum for the current rules");
                     ++whereDataIs;
                 }
             }
@@ -468,6 +473,13 @@ class LifeBoard extends JPanel implements MouseListener {
         }
     } // getBoardFromFile
 
+    int charToIntFromFile(char c){
+        if(c=='.') return 0;
+        if(c>='0'&&c<='9') return c-'9';
+        if(c>='a'&&c<='z') return c-'a'+10;
+        if(c>='A'&&c<='Z') return c-'A'+36;
+        else throw new IllegalArgumentException(c+" is not an acceptable imput for 'charToIntFromFile'");
+    }
     
     /**
      * return a text image of the <em>current</em> board
