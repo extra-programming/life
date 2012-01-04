@@ -112,14 +112,14 @@ public class LifeBoardTest extends junit.framework.TestCase
     }
     
     
-    public void testAutumn()
+    public void testAutumn() // may not work with rules
     {
         LifeBoard lifeBoar1 = new LifeBoard(4, 4);
         assertEquals(0, lifeBoar1.getCellData(new java.awt.Point(1,1)));
     }
     
     
-    public void testCellDataSetGetAndNeighborCount()
+    public void testCellDataSetGetAndNeighborCount() // may not work with rules
     {
         LifeBoard lifeBoar1 = new LifeBoard(2, 3);
         lifeBoar1.setCellData(new java.awt.Point(1,2), 1);
