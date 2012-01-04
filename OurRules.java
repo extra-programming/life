@@ -27,4 +27,14 @@ public class OurRules implements Rules
             return 0;
         }
     }
+    public int readFile(char c){
+        switch(c){
+            case '0':
+            case '.': return 0;
+            case '1':
+            case 'A': return 1;
+            case '2': return 2;
+            default: throw new IllegalArgumentException(c+" is not a valid input for OurRules");
+        }
+    }
 }

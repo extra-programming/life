@@ -21,4 +21,9 @@ public class ConwayRules implements Rules
             return 1;
         }
     }
+    public int readFile(char c){
+        if(c=='.' || c=='0' || (c>='a' && c<='z')) return 0;
+        if((c>'0' && c<='9') || (c>='A' && c<='Z')) return 1;
+        throw new IllegalArgumentException(c+" is not a valid input for OurRules");
+    }
 }

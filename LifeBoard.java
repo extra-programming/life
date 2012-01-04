@@ -459,11 +459,11 @@ class LifeBoard extends JPanel implements MouseListener {
                     }*/
                     int curData=0;
                     try{
-                        curData = charToIntFromFile(myString.charAt( whereDataIs ));
+                        curData = theRules.readFile(myString.charAt( whereDataIs ));
                     }catch(IllegalArgumentException iae){
                         throw new FileFormatException(iae);
                     }
-                    if(badCellValue(curData)) throw new FileFormatException(curData+" is not a valid cell datum for the current rules");
+                    //if(badCellValue(curData)) throw new FileFormatException(curData+" is not a valid cell datum for the current rules");
                     ++whereDataIs;
                 }
             }
