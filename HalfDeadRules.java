@@ -31,9 +31,11 @@ public class HalfDeadRules implements Rules
         }
     }
     public int getCellState(int cellState){
-        if(cellState==2||cellState==1||cellState==0) return cellState;
-        System.out.println(cellState+" is not acceptable for HalfDeadRules");
-        return 0;
+        //if(cellState==2||cellState==1||cellState==0) return cellState;
+        if(cellState==0) return 0;
+        if(cellState==1) return 2;
+        //System.out.println(cellState+" is not acceptable for HalfDeadRules");
+        return 1;
     }
     public int readCellState(char c){
         switch(c){
