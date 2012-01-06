@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import java.applet.*;
+import javax.swing.event.*;
 
 /**
  * @author Mike Roam et al.
@@ -26,6 +27,12 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     /* static */ Container myContentPane = null; // for applets and standalone
     public static final int FRAMEWIDTH = 500;
     public static final int FRAMEHEIGHT = 500;
+    
+    private static final String[] rulesList={
+        "ConwayRules",
+        "OurRules",
+        "HalfDeadRules",
+    };
 
     LifeBoard theBoard = null;  
     /* uh-oh: this is JPanel within my borderLayout, 
@@ -45,6 +52,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
     JButton quitBtn = new JButton( "Quit" );
     //Button quitBtn = new Button( "Quit" );
+    
+    JComboBox ruleChooser = new JComboBox( rulesList );
 
     JSlider delaySlider = null; /* is instantiated in buildDelayPanel( ) */
 
@@ -60,7 +69,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         init( );
     } // end of default constructor
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         LifeGame myLifeGame = new LifeGame( );
         JFrame frame = new JFrame(" Life Game ");
         frame.getContentPane().add( myLifeGame );
@@ -89,7 +99,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             myContentPane = getContentPane( );
         }
         /* Start life with a random board */
-        theBoard = new LifeBoard(/*cellsAcross:*/ 20, /*cellsDown*/20 );
+        theBoard = new LifeBoard(/*cellsAcross:*/ 32, /*cellsDown*/32, new HalfDeadRules() );
         this.buildGUI( );
     } // init( )
 
@@ -110,6 +120,13 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
      */
     public void buildGUI() {
         // this.setLayout( new BorderLayout( ) ); / /JApplet have this by default
+        
+        /*//setup rule menu
+        for(int i=0;i<rulesList.length;i++){
+            ruleTypes.add(new JMenuItem(rulesList[i]));
+        }
+        //done rule menu*/
+        
         JPanel setupPanel = new JPanel();
         setupPanel.setBorder(BorderFactory.createEmptyBorder( /* TLRB */ 10, 10, 10, 10) );
         /* TLRB means "top, left, bot, right" */
@@ -118,6 +135,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         setupPanel.setBackground( Color.BLUE );
         setupPanel.add( getFileBtn );
         setupPanel.add( randomBoardBtn );
+        setupPanel.add( ruleChooser );
 
         JPanel controlPanel = new JPanel( );
         controlPanel.setBorder(BorderFactory.createEmptyBorder( /* TLRB */ 10, 10, 10, 10) );
@@ -130,6 +148,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         controlPanel.add( stepPanel );
         controlPanel.add( buildDelayPanel( ) );
         controlPanel.add( quitBtn );
+        
+        ruleChooser.setSelectedIndex(2);
 
         //this.getContentadd( "North", paramPanel );
         if (myContentPane == null) {
@@ -167,6 +187,12 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     myContentPane.add( theBoard, BorderLayout.CENTER);
                     myContentPane.validate(); 
                     myContentPane.repaint();
+                    for(int i=0;i<rulesList.length;i++){
+                        if(rulesList[i]==theBoard.getRulesName()){
+                            ruleChooser.setSelectedIndex(i);
+                        }
+                    }
+                    repaint();
                 }
             }); // end of addActionListener
 
@@ -175,15 +201,15 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     System.out.println("randomBoard");
                     myContentPane.remove(theBoard);
 
-                    theBoard = new LifeBoard( 16, 16 );
+                    theBoard = new LifeBoard( 32, 32, selectedRules() );
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
                     //theBoard.paintImmediately(theBoard.getVisibleRect());
                     myContentPane.validate();
                     //myContentPane.repaint();
-                    stepContinuouslyBtn.setText("Run");
-                    /* [ ] ?? we should have variable for what kind of stepping !! */
+                    //stepContinuouslyBtn.setText("Run");
+                    /** [ ] ?? we should have variable for what kind of stepping !! */
                     repaint();
                 }
             }); // end of addActionListener
@@ -215,13 +241,55 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     System.exit( 0 );
                 }
             }); // end of addActionListener
+            
+        ruleChooser.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent ae){
+                System.out.println("ruleChooser");
+                /*myContentPane.remove(theBoard);
+
+                theBoard = new LifeBoard( 16, 16, selectedRules() );
+                theBoard.setBackground( Color.GREEN );
+                // no, bad! myContentPane.removeAll();
+                myContentPane.add( theBoard, BorderLayout.CENTER);
+                //theBoard.paintImmediately(theBoard.getVisibleRect());
+                myContentPane.validate();
+                //myContentPane.repaint();
+                //stepContinuouslyBtn.setText("Run");
+                // [ ] ?? we should have variable for what kind of stepping !! 
+                repaint();*/
+                theBoard.setRules(selectedRules());
+                repaint();
+        }
+        });
     } // addActionListenersToMyButtons( )
+    
+    public Rules selectedRules(){
+         String ruleName = ruleChooser.getSelectedItem().toString();
+         return getRulesFromString(ruleName);
+    }
+    
+    private Rules getRulesFromString(String ruleName){
+        Class maybeRulesClass;
+        try{
+            maybeRulesClass = Class.forName(ruleName);
+        }catch(Exception e){
+             throw new RuntimeException(ruleName+" is not a valid Rules");
+        }
+        Object maybeRules;
+        try{
+            maybeRules = maybeRulesClass.newInstance();
+        }catch(Exception e){
+            throw new RuntimeException(maybeRulesClass+" could not be instantialized");
+        }
+        if(!(maybeRules instanceof Rules)) throw new RuntimeException(maybeRulesClass+" is not a valid Rules");
+        return (Rules)maybeRules;
+    }
 
     /**
      * Initialize the delay slider and decorate it!
      */
     JPanel buildDelayPanel( ) {
-        delaySlider = new JSlider(JSlider.HORIZONTAL, /*min:*/0, /*max*/200, /*startVal:*/0);
+        delaySlider = new JSlider(JSlider.HORIZONTAL, /*min:*/0, /*max*/200, /*startVal:*/15);
         JPanel delayPanel = new JPanel( );
         delayPanel.add( new JLabel("Delay:") );
         delayPanel.add( delaySlider );

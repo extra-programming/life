@@ -1,19 +1,22 @@
 import java.awt.Color;
 public class OurRules implements Rules
 {
-    public int[] acceptableCellStates(){
+    public int getDefaultCellState(){
+        return 0;
+    }
+    public int[] getAcceptableCellStates(){
         return new int[]{0,1,2};
     }
-    public Color cellColor(int cellState){
+    public Color getCellColor(int cellState){
         if(cellState==0) return Color.WHITE;
         if(cellState==1) return Color.BLACK;
         return Color.RED;
     }
-    public int neighborValue(int cellState){
+    public int getNeighborValue(int cellState){
         if(cellState==0) return 0;
         return 1;
     }
-    public int cellState(int cellState, int neighborCount){
+    public int getCellState(int cellState, int neighborCount){
         if(cellState==0){
             if(neighborCount==3) return 1;
             return 0;
@@ -27,7 +30,12 @@ public class OurRules implements Rules
             return 0;
         }
     }
-    public int readFile(char c){
+    public int getCellState(int cellState){
+        if(cellState==2||cellState==1||cellState==0) return cellState;
+        System.out.println(cellState+" is not acceptable for OurRules");
+        return 0;
+    }
+    public int readCellState(char c){
         switch(c){
             case '0':
             case '.': return 0;

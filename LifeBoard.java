@@ -48,13 +48,13 @@ class LifeBoard extends JPanel implements MouseListener {
     final Color alive1Color = Color.red;
     final Color deadColor = Color.white;
     
-    final Rules theRules = new OurRules();
+    Rules theRules;
     
     /* two-dimensional array of ALIVE1 or ALIVE2 or DEAD*/ 
     int/*boolean*/[][] theData = null;
     /** holds data as we calculate new board */
     int/*boolean*/[][] newData = null;
-	Point badPoint =  new Point( -1, -1);  /* used in badLoc */
+    Point badPoint =  new Point( -1, -1);  /* used in badLoc */
 
 
     /**
@@ -62,8 +62,9 @@ class LifeBoard extends JPanel implements MouseListener {
     * Creates a new board, loads it with random dots
     * ??( perhaps could get dots from a file!?)
     */
-    LifeBoard( int newCellsAcross, int newCellsDown ) throws ArrayIndexOutOfBoundsException {
+    LifeBoard( int newCellsAcross, int newCellsDown , Rules newRules) throws ArrayIndexOutOfBoundsException {
         super();
+        theRules=newRules;
         setBackground( Color.GRAY );
         setOpaque(true);
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -80,6 +81,7 @@ class LifeBoard extends JPanel implements MouseListener {
         Random myNRG = new Random();
         theData = new int /*boolean*/ [ cellsAcross ] [ cellsDown ];
         newData = new int /*boolean*/ [ cellsAcross ] [ cellsDown ];
+        int[] cellStates = theRules.getAcceptableCellStates();
         for ( int x = 0; x < cellsAcross; ++x ) {
             for ( int y = 0; y < cellsDown; ++y ) {
                 /*if ( (myNRG.nextInt() % 3) == 1 ) {
@@ -89,7 +91,12 @@ class LifeBoard extends JPanel implements MouseListener {
                 } else {
                     theData[x][y] = DEAD;
                 } */
-                theData[x][y] = theRules.acceptableCellStates()[myNRG.nextInt(theRules.acceptableCellStates().length)];
+                int randState = myNRG.nextInt(cellStates.length*2);
+                if(randState>=cellStates.length){
+                    theData[x][y]=theRules.getDefaultCellState();
+                    continue;
+                }
+                theData[x][y] = cellStates[randState];
             } // for y
         } // for x
         addMouseListener(this);
@@ -109,9 +116,23 @@ class LifeBoard extends JPanel implements MouseListener {
         this.repaint( );
         // System.out.println( this.toString() );
     } // Lifeboard constructor
-
-   
-
+    
+    public void setRules(Rules newRules){
+        theRules=newRules;
+        for(int i=0;i<theData.length;i++){
+            for(int j=0;j<theData[i].length;j++){
+                if(badCellValue(theData[i][j])){
+                    theData[i][j]=theRules.getCellState(theData[i][j]);
+                }
+            }
+        }
+        repaint();
+    }
+    
+    public String getRulesName(){
+        return theRules.getClass().getSimpleName();
+    }
+    
     public void mousePressed(MouseEvent e) {
        // e.getClickCount(), e);
     }
@@ -168,10 +189,10 @@ class LifeBoard extends JPanel implements MouseListener {
     public int getCellData( Point cellLoc ) throws ArrayIndexOutOfBoundsException {
         if ( badGridLoc( cellLoc) ) {
             throw new ArrayIndexOutOfBoundsException("bad gridloc " + cellLoc + " in grid with width=" + cellsAcross + ", height=" + cellsDown);
-			//return badPoint;
-		} else {
-		    return theData[cellLoc.x][cellLoc.y];
-		}
+            //return badPoint;
+        } else {
+            return theRules.getCellState(theData[cellLoc.x][cellLoc.y]);
+        }
     } // getCellData( )
     
     
@@ -190,80 +211,82 @@ class LifeBoard extends JPanel implements MouseListener {
     public void setCellData( Point cellLoc, int newCellValue ) throws ArrayIndexOutOfBoundsException {
         if ( badGridLoc( cellLoc) ) {
             throw new ArrayIndexOutOfBoundsException("bad gridloc " + cellLoc + " in grid with width=" + cellsAcross + ", height=" + cellsDown);
-		}
-		if (badCellValue( newCellValue )) {
-		    
-        } else {
+        }
+        //if (badCellValue( newCellValue )) {
+            
+        //} else {
             // if  (theData[cellLoc.x][cellLoc.y] != newCellValue) {
-		   theData[cellLoc.x][cellLoc.y] = newCellValue;
-		   // }
-		}
+           theData[cellLoc.x][cellLoc.y] = theRules.getCellState(newCellValue);
+           // }
+        //}
     } // setCellData( )
     
 
-	/**
-	* Given a Point representing screenloc in pixels (over,down),
-	* return a Point representing the [x],[y] loc of the cell in the grid.
-	* What do we return if input gives us bad coords??
-	*/
-	Point whichCell( Point clickLoc ) {
-		/* Here's the equation for drawing cells:
-		myg.fillOval( /* left edge.. leftMargin + (x * cellWidth),
+    /**
+    * Given a Point representing screenloc in pixels (over,down),
+    * return a Point representing the [x],[y] loc of the cell in the grid.
+    * What do we return if input gives us bad coords??
+    */
+    Point whichCell( Point clickLoc ) {
+        /* Here's the equation for drawing cells:
+        myg.fillOval( /* left edge.. leftMargin + (x * cellWidth),
                               /* top edge..  topMargin + (y * cellHeight), 
                                 cellWidth, cellHeight ); */
-		if ( badGraphicLoc( clickLoc) ) {
-			return badPoint;
-		}
-		return null;
-	} /* whichCell( ) */
+        if ( badGraphicLoc( clickLoc) ) {
+            return badPoint;
+        }
+        return null;
+    } /* whichCell( ) */
 
-	
-	/**
-	 * Use this to check if a grid cell is being given a legit value.
-	 * This has to change if we allow different values, duh!
-	 * Will really have to change if we use a class to represent cell values!
-	 */
-	public boolean badCellValue( int theValue ) {
-	    int[] states=theRules.acceptableCellStates();
-	    for(int i=0;i<states.length;i++){
-	        if(theValue==states[i]) return true;
-	    }
-	    return false;
+    
+    /**
+     * Use this to check if a grid cell is being given a legit value.
+     * This has to change if we allow different values, duh!
+     * Will really have to change if we use a class to represent cell values!
+     */
+    public boolean badCellValue( int theValue ) {
+        int[] states = theRules.getAcceptableCellStates();
+        Arrays.sort(states);
+        return Arrays.binarySearch(states,theValue)>0;
+        /*for(int i=0;i<states.length;i++){
+            if(theValue == states[i]) return true;
+        }
+        return false;*/
         //return (( theValue < minLifeCellValue ) || ( theValue > maxLifeCellValue));
     } 
-	   
+       
 
-	/**
-	* Tells us if these screenloc pixel coordinates are out of bounds.
-	* Note: this is different from gridloc coordinates which speak in
-	* terms of [x],[y] loc of cells in the data grid!
-	*/
-	boolean badGraphicLoc( Point clickLoc ) {
-		if ( (clickLoc.x < 0 ) || (clickLoc.x >  wholePictureWidth)) { 
-			return true;
-		}
-		if ( (clickLoc.y < 0 ) || (clickLoc.y >  wholePictureHeight)) { 
-			return true;
-		}
-		return false;
-	} /* badLoc( ) */
-	
-	
-	/**
-	* Tells us if this  [x],[y] loc of cells in the data grid is out of bounds.
-	* Note: this is different from graphicloc coordinates which speak in
-	* terms of screenloc pixel coordinates!
-	* Note: beware the OBOB. An array size 3 has cells 0,1,2 so error if x >= 3, not just x>3!
-	*/
-	boolean badGridLoc( Point gridLoc ) {
-		if ( (gridLoc.x < 0 ) || (gridLoc.x >= cellsAcross ) ) {
-		    return true;
-		}
-		if ( (gridLoc.y < 0 ) || (gridLoc.y >= cellsDown) ) { 
-			return true;
-		}
-		return false;
-	} /* badLoc( ) */
+    /**
+    * Tells us if these screenloc pixel coordinates are out of bounds.
+    * Note: this is different from gridloc coordinates which speak in
+    * terms of [x],[y] loc of cells in the data grid!
+    */
+    boolean badGraphicLoc( Point clickLoc ) {
+        if ( (clickLoc.x < 0 ) || (clickLoc.x >  wholePictureWidth)) { 
+            return true;
+        }
+        if ( (clickLoc.y < 0 ) || (clickLoc.y >  wholePictureHeight)) { 
+            return true;
+        }
+        return false;
+    } /* badLoc( ) */
+    
+    
+    /**
+    * Tells us if this  [x],[y] loc of cells in the data grid is out of bounds.
+    * Note: this is different from graphicloc coordinates which speak in
+    * terms of screenloc pixel coordinates!
+    * Note: beware the OBOB. An array size 3 has cells 0,1,2 so error if x >= 3, not just x>3!
+    */
+    boolean badGridLoc( Point gridLoc ) {
+        if ( (gridLoc.x < 0 ) || (gridLoc.x >= cellsAcross ) ) {
+            return true;
+        }
+        if ( (gridLoc.y < 0 ) || (gridLoc.y >= cellsDown) ) { 
+            return true;
+        }
+        return false;
+    } /* badLoc( ) */
 
 
     /**
@@ -300,7 +323,7 @@ class LifeBoard extends JPanel implements MouseListener {
                 } else{
                     myg.setColor( deadColor );
                 };*/
-                myg.setColor(theRules.cellColor(theData[x][y]));
+                myg.setColor(theRules.getCellColor(theData[x][y]));
                 myg.fillOval( /* left edge */ leftMargin + (x * cellWidth),
                               /* top edge */  topMargin + (y * cellHeight), 
                                 cellWidth, cellHeight );
@@ -325,7 +348,7 @@ class LifeBoard extends JPanel implements MouseListener {
                     } else {
                         myg.setColor( deadColor );
                     };*/
-                    myg.setColor(theRules.cellColor(theData[x][y]));
+                    myg.setColor(theRules.getCellColor(theData[x][y]));
                     myg.fillOval( /* left: */ leftMargin + (x * cellWidth),
                                 /* top: */ topMargin + (y * cellHeight), 
                                 /* width: */    cellWidth,
@@ -369,7 +392,7 @@ class LifeBoard extends JPanel implements MouseListener {
                         newData[x][y] = DEAD;
                     }
                 }*/
-                newData[x][y] = theRules.cellState(theData[x][y],numOfNeighbors);
+                newData[x][y] = theRules.getCellState(theData[x][y],numOfNeighbors);
             } // for y
         } // for x 
         // now swap the pointers to the boards;;
@@ -397,18 +420,20 @@ class LifeBoard extends JPanel implements MouseListener {
                 /*if (( theData[xiloc][yiloc] == ALIVE1 ) ||  ( theData[xiloc][yiloc] == ALIVE2 )) {
                     ++totalNeighbors;
                 }*/
-                totalNeighbors+=theRules.neighborValue(theData[xiloc][yiloc]);
+                totalNeighbors+=theRules.getNeighborValue(theData[xiloc][yiloc]);
             }
         }
         // don't count yourself!;
         /*if (( theData[x][y] == ALIVE1) || ( theData[x][y] == ALIVE2 )) {
             --totalNeighbors;
         };*/
-        totalNeighbors-=theRules.neighborValue(theData[x][y]);
+        totalNeighbors-=theRules.getNeighborValue(theData[x][y]);
         return totalNeighbors;
     } // neighborCount( )
 
-
+    boolean isAlphabetic(char c){
+        return (c>='a'&&c<='z')||(c>='A'&&c<='Z');
+    }
 
     /** 
     * This should use some java kind of split or parse to get the ints!
@@ -425,13 +450,13 @@ class LifeBoard extends JPanel implements MouseListener {
         File myF = ComponentUtil.getSomeOldFile( theFrame );
         String myString = ComponentUtil.readStringFromFile( myF );
         /* file should start with word "life\n"...*/;
-        try {
+        //try {
             /* going to try to read "life <int> <int>" from start of file */;
             int whereFirstBlankIs = myString.indexOf( ' ' );
             String firstWord = myString.substring( 0, whereFirstBlankIs );
             if ( ! "life".equals( firstWord ) ) {
                 System.out.println( "first chars in life file should be 'life' but is '" + myString.substring(0, 4) + "'" );
-                throw new FileNotFoundException();
+                throw new FileFormatException();
             };
             int whereSecondBlankIs = myString.indexOf( ' ', whereFirstBlankIs + 1 );
             String secondWord = myString.substring( whereFirstBlankIs + 1, whereSecondBlankIs );
@@ -446,6 +471,24 @@ class LifeBoard extends JPanel implements MouseListener {
             theData = new int /*boolean*/ [ cellsAcross ] [ cellsDown ];
             newData = new int /*boolean*/ [ cellsAcross ] [ cellsDown ];
             int whereDataIs = whereThirdBlankIs + 1;
+            StringBuilder sb = new StringBuilder();
+            for(whereDataIs = 1 + myString.indexOf("Rules:",whereDataIs) + 5; isAlphabetic(myString.charAt(whereDataIs)); whereDataIs++){
+                sb.append(myString.charAt(whereDataIs));
+            }
+            Class maybeRulesClass;
+            try{
+                maybeRulesClass = Class.forName(sb.toString());
+            }catch(Exception e){
+                 throw new FileFormatException(sb+" is not a valid Rules");
+            }
+            Object maybeRules;
+            try{
+                maybeRules = maybeRulesClass.newInstance();
+            }catch(Exception e){
+                throw new FileFormatException(maybeRulesClass+" could not be instantialized");
+            }
+            if(!(maybeRules instanceof Rules)) throw new FileFormatException(maybeRulesClass+" is not a valid Rules");
+            theRules = (Rules)maybeRules;
             for ( int y = 0; y < cellsDown; ++y ) {
                 /* each line starts with : */;
                 whereDataIs = 1 + myString.indexOf( ':', whereDataIs );
@@ -459,22 +502,24 @@ class LifeBoard extends JPanel implements MouseListener {
                     }*/
                     int curData=0;
                     try{
-                        curData = theRules.readFile(myString.charAt( whereDataIs ));
+                        curData = theRules.readCellState(myString.charAt( whereDataIs ));
                     }catch(IllegalArgumentException iae){
                         throw new FileFormatException(iae);
                     }
                     //if(badCellValue(curData)) throw new FileFormatException(curData+" is not a valid cell datum for the current rules");
+                    theData[x][y]=curData;
                     ++whereDataIs;
                 }
             }
-        } catch( Exception e ) {
+        /*} catch( Exception e ) {
             System.out.println( "Error in getBoardFromFile: " + e.toString() );
             //this.LifeBoard( 16, 16 ) ?? have to fill in a dud board, perhaps random?;
-        }
+        }*/
+        this.repaint();
     } // getBoardFromFile
 
     int charToIntFromFile(char c){
-        if(c=='.') return 0;
+        if(c=='.') return theRules.getDefaultCellState();
         if(c>='0'&&c<='9') return c-'9';
         if(c>='a'&&c<='z') return c-'a'+10;
         if(c>='A'&&c<='Z') return c-'A'+36;
@@ -485,7 +530,7 @@ class LifeBoard extends JPanel implements MouseListener {
      * return a text image of the <em>current</em> board
      */
     public String toString() {
-        StringBuffer mySB = new StringBuffer( (cellsAcross + 1) * cellsDown );
+        StringBuilder mySB = new StringBuilder()/*Buffer( (cellsAcross + 1) * cellsDown )*/;
         for ( int y = 0; y < cellsDown; ++y ) {
             for ( int x = 0; x < cellsAcross; ++x ) {
                 /*if ( theData[x][y] == ALIVE1 ) {
@@ -495,13 +540,13 @@ class LifeBoard extends JPanel implements MouseListener {
                 } else {
                     mySB.append( '.' );
                 };*/
-                if(theData[x][y] == 0) mySB.append('.');
+                if(theData[x][y] == theRules.getDefaultCellState()) mySB.append('.');
                 else mySB.append(theData[x][y]);
             };
             mySB.append( '\n' );
         };
-        String tempStr = new String( mySB );
-        return tempStr;
+        //String tempStr = new String( mySB );
+        return mySB.toString();
     } // toString( )
 
 
