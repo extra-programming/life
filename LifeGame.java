@@ -32,7 +32,6 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         "ConwayRules",
         "OurRules",
         "HalfDeadRules",
-        "RulesFromFile",
     };
 
     LifeBoard theBoard = null;  
