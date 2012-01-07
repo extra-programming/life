@@ -7,7 +7,7 @@ import javax.swing.*; /* provides "JPanel" class */
 import java.awt.*;
 //import java.awt.event.*;
 import java.util.*; /* provides "Random( )" method */
-import java.io.*; /* provides "File" class */
+import java.net.URL;
 
 
 /**
@@ -447,8 +447,9 @@ class LifeBoard extends JPanel implements MouseListener {
         with periods for dead cells and 'A's for live ones
         AND '2' for alive2
             */;
-        File myF = ComponentUtil.getSomeOldFile( theFrame );
+        URL myF = ComponentUtil.getSomeOldFile( theFrame );
         String myString = ComponentUtil.readStringFromFile( myF );
+        System.out.println(myString);
         /* file should start with word "life\n"...*/;
         //try {
             /* going to try to read "life <int> <int>" from start of file */;
