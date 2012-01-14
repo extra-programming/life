@@ -15,6 +15,7 @@ import java.util.*;
 import java.io.*;
 import java.applet.*;
 import javax.swing.event.*;
+import java.text.NumberFormat;
 
 /**
  * @author Mike Roam et al.
@@ -52,6 +53,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
     JButton quitBtn = new JButton( "Quit" );
     //Button quitBtn = new Button( "Quit" );
+    
+    JLabel generationCount = new JLabel("0");
     
     JComboBox ruleChooser = new JComboBox( rulesList );
 
@@ -130,7 +133,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         JPanel setupPanel = new JPanel();
         setupPanel.setBorder(BorderFactory.createEmptyBorder( /* TLRB */ 10, 10, 10, 10) );
         /* TLRB means "top, left, bot, right" */
-        setupPanel.setLayout(new GridLayout(/* rows (height) */ 0, /* cols (width) */ 1));
+        setupPanel.setLayout(new GridLayout(/* rows (height) */ 3, /* cols (width) */ 1));
         //paramPanel.setLayout( new FlowLayout() );
         setupPanel.setBackground( Color.BLUE );
         setupPanel.add( getFileBtn );
@@ -155,8 +158,12 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         if (myContentPane == null) {
             System.out.println("myContentPane is still null");
         }
-        myContentPane.add( new JLabel("page_start"), BorderLayout.PAGE_START);
-        myContentPane.add( new JLabel("line_start"), BorderLayout.LINE_START);
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridLayout(1,2));
+        infoPanel.add(new JLabel("Generations: "));
+        infoPanel.add(generationCount);
+        myContentPane.add( infoPanel, BorderLayout.PAGE_START );
+        //myContentPane.add( new JLabel("line_start"), BorderLayout.LINE_START);
         myContentPane.add( theBoard, BorderLayout.CENTER);
         //myContentPane.add("East", paramPanel);
         myContentPane.add( setupPanel, BorderLayout.LINE_END);
@@ -352,6 +359,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             // theBoard.quickDraw( g );   // need to get g from somewhere!
             //System.out.println( i + " " );;
         } // for howManySteps
+        generationCount.setText(NumberFormat.getIntegerInstance().format(theBoard.getGenerationCount()));
         repaint( );
     } // lifeStep()
 

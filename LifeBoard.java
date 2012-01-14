@@ -27,6 +27,7 @@ class LifeBoard extends JPanel implements MouseListener {
     private static final long serialVersionUID = 42L;  // makes serializable happy
     private int cellsAcross = 20;
     private int cellsDown = 20;
+    private int generationCount = 0;
 
     int cellWidth = 8;
     int cellHeight = 8;
@@ -64,6 +65,7 @@ class LifeBoard extends JPanel implements MouseListener {
     */
     LifeBoard( int newCellsAcross, int newCellsDown , Rules newRules) throws ArrayIndexOutOfBoundsException {
         super();
+        generationCount=0;
         theRules=newRules;
         setBackground( Color.GRAY );
         setOpaque(true);
@@ -111,11 +113,16 @@ class LifeBoard extends JPanel implements MouseListener {
     */
     LifeBoard( Component theFrame ) {
         super();
+        generationCount=0;
         setBackground( Color.GRAY );
         getBoardFromFile( theFrame ); // Filename is found by theFrame somehow
         this.repaint( );
         // System.out.println( this.toString() );
     } // Lifeboard constructor
+    
+    public int getGenerationCount(){
+        return generationCount;
+    }
     
     public void setRules(Rules newRules){
         theRules=newRules;
@@ -395,6 +402,7 @@ class LifeBoard extends JPanel implements MouseListener {
                 newData[x][y] = theRules.getCellState(theData[x][y],numOfNeighbors);
             } // for y
         } // for x 
+         generationCount++;
         // now swap the pointers to the boards;;
         int /*boolean*/[][] tempPtr = theData;
         theData = newData;
@@ -515,6 +523,7 @@ class LifeBoard extends JPanel implements MouseListener {
             System.out.println( "Error in getBoardFromFile: " + e.toString() );
             //this.LifeBoard( 16, 16 ) ?? have to fill in a dud board, perhaps random?;
         }*/
+        generationCount=0;
         this.repaint();
     } // getBoardFromFile
 
