@@ -1,5 +1,5 @@
 import java.awt.Color;
-import java.io.*;
+import java.net.URL;
 /**
  * Write a description of class RulesFromFile here.
  * 
@@ -8,15 +8,22 @@ import java.io.*;
  */
 public class RulesFromFile implements Rules
 {
+    public int defaultCellState;
+    public int[] acceptableCellStates;
+    
+    
+    public RulesFromFile(URL file) {
+        
+    }
     
     
     public int getDefaultCellState() {
-        return 0;
+        return defaultCellState;
     }
     
     
     public int[] getAcceptableCellStates() {
-        return null;
+        return acceptableCellStates;
     }
     
     
