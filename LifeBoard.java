@@ -57,7 +57,18 @@ class LifeBoard extends JPanel implements MouseListener {
     int/*boolean*/[][] newData = null;
     Point badPoint =  new Point( -1, -1);  /* used in badLoc */
 
-
+    LifeBoard(Rules newRules) throws ArrayIndexOutOfBoundsException {
+        this(DimensionsInputDialog.showDialog(), newRules);
+    }
+    
+    LifeBoard(String dimensionMessage, Rules newRules) throws ArrayIndexOutOfBoundsException {
+        this(DimensionsInputDialog.showDialog(dimensionMessage), newRules);
+    }
+    
+    LifeBoard(int[] dimensions, Rules newRules) throws ArrayIndexOutOfBoundsException {
+        this(dimensions[0],dimensions[1],newRules);
+    }
+    
     /**
     * Constructor for specified width and height
     * Creates a new board, loads it with random dots

@@ -102,7 +102,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             myContentPane = getContentPane( );
         }
         /* Start life with a random board */
-        theBoard = new LifeBoard(/*cellsAcross:*/ 32, /*cellsDown*/32, new HalfDeadRules() );
+        theBoard = new LifeBoard( new HalfDeadRules() );
         this.buildGUI( );
     } // init( )
 
@@ -208,7 +208,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     System.out.println("randomBoard");
                     myContentPane.remove(theBoard);
 
-                    theBoard = new LifeBoard( 32, 32, selectedRules() );
+                    theBoard = new LifeBoard( selectedRules() );
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
