@@ -9,4 +9,9 @@ public interface Rules
     /**used for changing rules, cell might not be an acceptable cell state, make sure it is one*/
     int getCellState(int cellState);
     int readCellState(char c);
+    /**
+     * Used for more advanced rules that need to display different options for users<br /><br />
+     * If the rule does not need to display anything after being selected from the rules menu then do nothing here
+     */
+    void doRuleSelectorUI();
 }

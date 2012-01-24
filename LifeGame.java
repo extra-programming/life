@@ -258,7 +258,9 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                 //stepContinuouslyBtn.setText("Run");
                 // [ ] ?? we should have variable for what kind of stepping !! 
                 repaint();*/
-                theBoard.setRules(selectedRules());
+                Rules newRule = selectedRules();
+                newRule.doRuleSelectorUI();
+                theBoard.setRules(newRule);
                 repaint();
         }
         });

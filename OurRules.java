@@ -45,4 +45,6 @@ public class OurRules implements Rules
             default: throw new IllegalArgumentException(c+" is not a valid input for OurRules");
         }
     }
+    
+    public void doRuleSelectorUI() {}
 }

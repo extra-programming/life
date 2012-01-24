@@ -34,4 +34,6 @@ public class ConwayRules implements Rules
         if((c>'0' && c<='9') || (c>='A' && c<='Z')) return 1;
         throw new IllegalArgumentException(c+" is not a valid input for OurRules");
     }
+    
+    public void doRuleSelectorUI() {}
 }

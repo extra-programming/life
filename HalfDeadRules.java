@@ -48,4 +48,6 @@ public class HalfDeadRules implements Rules
             default: throw new IllegalArgumentException(c+" is not a valid input for HalfDeadRules");
         }
     }
+    
+    public void doRuleSelectorUI() {}
 }
