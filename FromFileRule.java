@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.net.URL;
+import java.util.HashMap;
 /**
  * A Class that processes and represents a Rule loaded from a file
  * 
@@ -9,6 +10,9 @@ public class FromFileRule implements Rules
 {
     public int defaultCellState;
     public int[] acceptableCellStates;
+    public Color[] cellColors;
+    public int[] neighborValues;
+    public HashMap<Character,Integer> charToCellStatesTable = new HashMap<Character,Integer>();
     
     
     public FromFileRule(URL file) {
@@ -27,12 +31,12 @@ public class FromFileRule implements Rules
     
     
     public Color getCellColor(int cellState) {
-        return null;
+        return cellColors[cellState];
     }
     
     
     public int getNeighborValue(int cellState) {
-        return 0;
+        return neighborValues[cellState];
     }
     
     
@@ -47,8 +51,8 @@ public class FromFileRule implements Rules
     
     
     public int readCellState(char c) {
-        return 0;
+        return charToCellStatesTable.get(c);
     }
     
-    public void doRuleSelectorUI() {}
+    public boolean loadRule() {return false;}
 }

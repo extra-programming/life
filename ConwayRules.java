@@ -35,5 +35,5 @@ public class ConwayRules implements Rules
         throw new IllegalArgumentException(c+" is not a valid input for OurRules");
     }
     
-    public void doRuleSelectorUI() {}
+    public boolean loadRule() {return true;}
 }

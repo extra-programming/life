@@ -42,7 +42,7 @@ public class RulesFromFile implements Rules
         return loadedRules.get(rulePointer).readCellState(c);
     }
 
-    public void doRuleSelectorUI() {
+    public boolean loadRule() {
         Object[] options = Arrays.copyOf(loadedRules.toArray(),loadedRules.size() + 1);
         options[options.length-1] = "Load New Rule File...";
         Object choice =JOptionPane.showInputDialog(null,
@@ -53,11 +53,13 @@ public class RulesFromFile implements Rules
                 options[rulePointer]);
 
         if(loadedRules.indexOf(choice) == -1) {
-            choice = new FromFileRule(ComponentUtil.getSomeOldFile(null));
+            URL file = ComponentUtil.getSomeOldFile(null);
+            if(file == null) return false;
+            choice = new FromFileRule(file);
             loadedRules.add((FromFileRule)choice);
         }
         rulePointer = loadedRules.indexOf(choice);
-
+        return true;
     }
 }
 

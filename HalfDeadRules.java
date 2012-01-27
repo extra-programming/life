@@ -49,5 +49,5 @@ public class HalfDeadRules implements Rules
         }
     }
     
-    public void doRuleSelectorUI() {}
+    public boolean loadRule() {return true;}
 }

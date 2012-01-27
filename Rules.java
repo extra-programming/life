@@ -10,8 +10,9 @@ public interface Rules
     int getCellState(int cellState);
     int readCellState(char c);
     /**
-     * Used for more advanced rules that need to display different options for users<br /><br />
-     * If the rule does not need to display anything after being selected from the rules menu then do nothing here
+     * Used for more advanced rules that need to do things before they are used<br /><br />
+     * If the rule does not need to do anything after being selected from the rules menu then do nothing here
+     * @return true if life should go ahead with the rule switch, false if there is a problem encountered and life should not change rules
      */
-    void doRuleSelectorUI();
+    boolean loadRule();
 }

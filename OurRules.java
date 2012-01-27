@@ -46,5 +46,5 @@ public class OurRules implements Rules
         }
     }
     
-    public void doRuleSelectorUI() {}
+    public boolean loadRule() {return true;}
 }
