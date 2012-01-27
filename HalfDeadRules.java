@@ -37,7 +37,7 @@ public class HalfDeadRules implements Rules
         //System.out.println(cellState+" is not acceptable for HalfDeadRules");
         return 1;
     }
-    public int readCellState(char c){
+    public int getCellStateFromFile(char c){
         switch(c){
             case '0':
             case '.': return 0;
@@ -47,5 +47,11 @@ public class HalfDeadRules implements Rules
             case 'A': return 2;
             default: throw new IllegalArgumentException(c+" is not a valid input for HalfDeadRules");
         }
+    }
+    public boolean initRule(){
+        return true;
+    }
+    public int getCellStateFromClick(int cellState){
+        return (cellState+1)%3;
     }
 }

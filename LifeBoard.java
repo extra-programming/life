@@ -522,7 +522,7 @@ class LifeBoard extends JPanel implements MouseListener {
                     }*/
                     int curData=0;
                     try{
-                        curData = theRules.readCellState(myString.charAt( whereDataIs ));
+                        curData = theRules.getCellStateFromFile(myString.charAt( whereDataIs ));
                     }catch(IllegalArgumentException iae){
                         throw new FileFormatException(iae);
                     }

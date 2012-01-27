@@ -29,9 +29,15 @@ public class ConwayRules implements Rules
         System.out.println(cellState+" not acceptable for ConwayRules");
         return 0;
     }
-    public int readCellState(char c){
+    public int getCellStateFromFile(char c){
         if(c=='.' || c=='0' || (c>='a' && c<='z')) return 0;
         if((c>'0' && c<='9') || (c>='A' && c<='Z')) return 1;
         throw new IllegalArgumentException(c+" is not a valid input for OurRules");
+    }
+    public boolean initRule(){
+        return true;
+    }
+    public int getCellStateFromClick(int cellState){
+        return (cellState+1)%2;
     }
 }

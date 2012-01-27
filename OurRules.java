@@ -35,7 +35,7 @@ public class OurRules implements Rules
         System.out.println(cellState+" is not acceptable for OurRules");
         return 0;
     }
-    public int readCellState(char c){
+    public int getCellStateFromFile(char c){
         switch(c){
             case '0':
             case '.': return 0;
@@ -44,5 +44,11 @@ public class OurRules implements Rules
             case '2': return 2;
             default: throw new IllegalArgumentException(c+" is not a valid input for OurRules");
         }
+    }
+    public boolean initRule(){
+        return true;
+    }
+    public int getCellStateFromClick(int cellState){
+        return (cellState+1)%3;
     }
 }

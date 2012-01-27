@@ -8,5 +8,7 @@ public interface Rules
     int getCellState(int cellState, int neighborCount);
     /**used for changing rules, cell might not be an acceptable cell state, make sure it is one*/
     int getCellState(int cellState);
-    int readCellState(char c);
+    int getCellStateFromFile(char c);
+    boolean initRule();
+    int getCellStateFromClick(int cellState);
 }
