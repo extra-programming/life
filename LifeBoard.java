@@ -178,9 +178,24 @@ class LifeBoard extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
        // e.getClickCount() + ")", e);
        Point whereClicked = e.getPoint( );
-       System.out.println("Click at (local):" + whereClicked);
+       System.out.println("Click at (lifeboard):" + whereClicked);
+       
+       changeCell(whereClicked);
+       
+       //int bx=getBoardX(x), by=getBoardY(y);
+         //           if(bx!=-1&&by!=-1) changeCellVal(getBoardX(x),getBoardY(y));
     } /* mouseClicked( ) */
 
+    public void changeCell(Point whereClicked) {
+        //First map the point to a cell location
+        Point clickedCell = whichCell(whereClicked);
+       
+        //Get the value that's currently in the cell
+        int data = getCellData(clickedCell);
+        //Increment the value while also keeping track of overflow.
+        data++;
+        setCellData(clickedCell, data);
+    }
     
     
     /**
@@ -238,7 +253,8 @@ class LifeBoard extends JPanel implements MouseListener {
             
         //} else {
             // if  (theData[cellLoc.x][cellLoc.y] != newCellValue) {
-           theData[cellLoc.x][cellLoc.y] = theRules.getCellState(newCellValue);
+           theData[cellLoc.x][cellLoc.y] = theRules.getCellState(newCellValue%(theRules.getAcceptableCellStates().length));
+           this.repaint( );
            // }
         //}
     } // setCellData( )
@@ -254,10 +270,20 @@ class LifeBoard extends JPanel implements MouseListener {
         myg.fillOval( /* left edge.. leftMargin + (x * cellWidth),
                               /* top edge..  topMargin + (y * cellHeight), 
                                 cellWidth, cellHeight ); */
-        if ( badGraphicLoc( clickLoc) ) {
+         if ( badGraphicLoc( clickLoc) ) {
             return badPoint;
         }
-        return null;
+         Point cellLoc=new Point();
+         
+         cellLoc.x = (clickLoc.x - leftMargin)/cellWidth;
+         cellLoc.y = (clickLoc.y - topMargin)/cellHeight;
+         
+         if (badGridLoc(cellLoc) != true) {
+             return cellLoc;
+            } else {
+             return new Point();
+            }
+           
     } /* whichCell( ) */
 
     

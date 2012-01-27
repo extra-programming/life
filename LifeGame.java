@@ -179,14 +179,14 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     } // buildGUI( )
 
     void addActionListenersToMyButtons( ) {
-        this.addMouseListener (new MouseAdapter(){
+       /* this.addMouseListener (new MouseAdapter(){ //This has been moved to the lifeboard class. It should handle its own clicks.
                 public void mouseClicked(MouseEvent e){
                     int x = e.getX(), y = e.getY();
                     System.out.println("mouse clicked on "+x+", "+y);
                     int bx=getBoardX(x), by=getBoardY(y);
                     if(bx!=-1&&by!=-1) changeCellVal(getBoardX(x),getBoardY(y));
                 }
-            });
+            });*/
 
         getFileBtn.addActionListener( new ActionListener() {
                 public void actionPerformed(ActionEvent e){
