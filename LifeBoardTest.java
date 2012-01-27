@@ -46,14 +46,14 @@ public class LifeBoardTest extends junit.framework.TestCase
 
     public void test1()
     {
-        LifeBoard lifeBoard10x10 = new LifeBoard(10, 10, new OurRules());
+        LifeBoard lifeBoard10x10 = new LifeBoard(10, 10, new OurRules(),true);
     }
     
 
 
     public void testInstantiate()
     {
-        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules());
+        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules(),true);
         assertEquals(false, lifeBoar1.equals(null));
         assertEquals(2, lifeBoar1.getCellsAcross());
         assertEquals(3, lifeBoar1.getCellsDown());
@@ -64,7 +64,7 @@ public class LifeBoardTest extends junit.framework.TestCase
     //@Test
     public void testBoardsize()
     {
-        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules());
+        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules(),true);
         assertEquals(false, lifeBoar1.badGridLoc(new java.awt.Point(0,1)));
         assertEquals(false, lifeBoar1.badGridLoc(new java.awt.Point(0,0)));
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(-1,1)));
@@ -75,7 +75,7 @@ public class LifeBoardTest extends junit.framework.TestCase
 
     public void testInstance0()
     {
-        LifeBoard lifeBoar1 = new LifeBoard(0, 0, new OurRules());
+        LifeBoard lifeBoar1 = new LifeBoard(0, 0, new OurRules(),true);
         assertEquals(false, lifeBoar1==null);
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(0,1)));
         assertEquals(true, lifeBoar1.badGridLoc(new java.awt.Point(0,0)));
@@ -86,7 +86,7 @@ public class LifeBoardTest extends junit.framework.TestCase
 
     public void test1a()
     {
-        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules());
+        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules(),true);
         assertEquals(2, lifeBoar1.getCellsAcross());
         assertEquals(3, lifeBoar1.getCellsDown());
     }
@@ -97,14 +97,14 @@ public class LifeBoardTest extends junit.framework.TestCase
         // oops, brutal: perhaps do try catch
         String errStr=null;
         try{
-            new LifeBoard(1,-7, new OurRules());
+            new LifeBoard(1,-7, new OurRules(),true);
         }catch(java.lang.ArrayIndexOutOfBoundsException e){
             errStr=e.toString();
         }
         assertEquals(true, errStr!=null);
         errStr=null;
         try{
-            new LifeBoard(-3,4, new OurRules());
+            new LifeBoard(-3,4, new OurRules(),true);
         }catch(java.lang.ArrayIndexOutOfBoundsException e){
             errStr=e.toString();
         }
@@ -114,14 +114,14 @@ public class LifeBoardTest extends junit.framework.TestCase
     
     public void testAutumn() // may not work with rules
     {
-        LifeBoard lifeBoar1 = new LifeBoard(4, 4, new OurRules());
+        LifeBoard lifeBoar1 = new LifeBoard(4, 4, new OurRules(),true);
         assertEquals(0, lifeBoar1.getCellData(new java.awt.Point(1,1)));
     }
     
     
     public void testCellDataSetGetAndNeighborCount() // may not work with rules
     {
-        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules());
+        LifeBoard lifeBoar1 = new LifeBoard(2, 3, new OurRules(),true);
         lifeBoar1.setCellData(new java.awt.Point(1,2), 1);
         assertEquals(1, lifeBoar1.getCellData(new java.awt.Point(1,2)));
         assertEquals(0, lifeBoar1.neighborCount(1, 2));

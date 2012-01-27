@@ -57,16 +57,16 @@ class LifeBoard extends JPanel implements MouseListener {
     int/*boolean*/[][] newData = null;
     Point badPoint =  new Point( -1, -1);  /* used in badLoc */
 
-    LifeBoard(Rules newRules) throws ArrayIndexOutOfBoundsException {
-        this(DimensionsInputDialog.showDialog(), newRules);
+    LifeBoard(Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
+        this(DimensionsInputDialog.showDialog(), newRules, fill);
     }
     
-    LifeBoard(String dimensionMessage, Rules newRules) throws ArrayIndexOutOfBoundsException {
-        this(DimensionsInputDialog.showDialog(dimensionMessage), newRules);
+    LifeBoard(String dimensionMessage, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
+        this(DimensionsInputDialog.showDialog(dimensionMessage), newRules, fill);
     }
     
-    LifeBoard(int[] dimensions, Rules newRules) throws ArrayIndexOutOfBoundsException {
-        this(dimensions[0],dimensions[1],newRules);
+    LifeBoard(int[] dimensions, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
+        this(dimensions[0],dimensions[1],newRules, fill);
     }
     
     /**
@@ -74,7 +74,7 @@ class LifeBoard extends JPanel implements MouseListener {
     * Creates a new board, loads it with random dots
     * ??( perhaps could get dots from a file!?)
     */
-    LifeBoard( int newCellsAcross, int newCellsDown , Rules newRules) throws ArrayIndexOutOfBoundsException {
+    LifeBoard( int newCellsAcross, int newCellsDown , Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
         super();
         generationCount=0;
         theRules=newRules;
@@ -104,12 +104,16 @@ class LifeBoard extends JPanel implements MouseListener {
                 } else {
                     theData[x][y] = DEAD;
                 } */
-                int randState = myNRG.nextInt(cellStates.length*2);
-                if(randState>=cellStates.length){
-                    theData[x][y]=theRules.getDefaultCellState();
-                    continue;
+                if(fill){
+                   int randState = myNRG.nextInt(cellStates.length*2);
+                    if(randState>=cellStates.length){
+                        theData[x][y]=theRules.getDefaultCellState();
+                        continue;
+                    }
+                    theData[x][y] = cellStates[randState];
+                }else{
+                    theData[x][y] = theRules.getDefaultCellState();
                 }
-                theData[x][y] = cellStates[randState];
             } // for y
         } // for x
         addMouseListener(this);

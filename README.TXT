@@ -24,6 +24,8 @@ java LifeGame
 
 
 # Future Plans:
+[ ]rule classes and rule factorys, would use a factory that returns a rule to read rule from file, eg.
+
 [ ]for bad arguments might use   		throw new IllegalArgumentException( "bad argument X=" + X ); 
 [ ]see Golly in reaktor which plays life game as sine wave synthesizer
 # [ ]Click to draw/erase cells.

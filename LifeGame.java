@@ -45,6 +45,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
     JButton randomBoardBtn = new JButton( "Random Board" );
     //Button randomBoardBtn = new Button( "Random Board" );
+    
+    JButton blankBoardBtn = new JButton( "Blank Board" );
 
     JButton stepOneBtn = new JButton( "Step" );
     //Button goMoreBtn = new Button( "Step" );
@@ -102,7 +104,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             myContentPane = getContentPane( );
         }
         /* Start life with a random board */
-        theBoard = new LifeBoard( new HalfDeadRules() );
+        theBoard = new LifeBoard( new HalfDeadRules(),true );
         this.buildGUI( );
     } // init( )
 
@@ -138,6 +140,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         setupPanel.setBackground( Color.BLUE );
         setupPanel.add( getFileBtn );
         setupPanel.add( randomBoardBtn );
+        setupPanel.add( blankBoardBtn );
         setupPanel.add( ruleChooser );
 
         JPanel controlPanel = new JPanel( );
@@ -208,7 +211,25 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     System.out.println("randomBoard");
                     myContentPane.remove(theBoard);
 
-                    theBoard = new LifeBoard( selectedRules() );
+                    theBoard = new LifeBoard( selectedRules(),true );
+                    theBoard.setBackground( Color.GREEN );
+                    // no, bad! myContentPane.removeAll();
+                    myContentPane.add( theBoard, BorderLayout.CENTER);
+                    //theBoard.paintImmediately(theBoard.getVisibleRect());
+                    myContentPane.validate();
+                    //myContentPane.repaint();
+                    //stepContinuouslyBtn.setText("Run");
+                    /** [ ] ?? we should have variable for what kind of stepping !! */
+                    repaint();
+                }
+            }); // end of addActionListener
+            
+        blankBoardBtn.addActionListener( new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    System.out.println("blankBoard");
+                    myContentPane.remove(theBoard);
+
+                    theBoard = new LifeBoard( selectedRules(),false );
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
