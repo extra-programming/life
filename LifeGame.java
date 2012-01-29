@@ -209,9 +209,12 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         randomBoardBtn.addActionListener( new ActionListener() {
                 public void actionPerformed(ActionEvent e){
                     System.out.println("randomBoard");
+                  
+                    String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
+                    
                     myContentPane.remove(theBoard);
 
-                    theBoard = new LifeBoard( selectedRules(),true );
+                    theBoard = new LifeBoard( selectedRules(),true, currentSize );
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
@@ -227,9 +230,13 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         blankBoardBtn.addActionListener( new ActionListener() {
                 public void actionPerformed(ActionEvent e){
                     System.out.println("blankBoard");
-                    myContentPane.remove(theBoard);
-
-                    theBoard = new LifeBoard( selectedRules(),false );
+                   
+                    
+                    String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
+                    
+                    myContentPane.remove(theBoard); 
+                    
+                    theBoard = new LifeBoard( selectedRules(),false, currentSize ); //Should cache the previous board size
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);

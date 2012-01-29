@@ -25,8 +25,8 @@ class LifeBoard extends JPanel implements MouseListener {
     */
 
     private static final long serialVersionUID = 42L;  // makes serializable happy
-    private int cellsAcross = 20;
-    private int cellsDown = 20;
+    public Integer cellsAcross = 20;
+    public Integer cellsDown = 20;
     private int generationCount = 0;
 
     int cellWidth = 8;
@@ -61,8 +61,12 @@ class LifeBoard extends JPanel implements MouseListener {
         this(DimensionsInputDialog.showDialog(), newRules, fill);
     }
     
+     LifeBoard(Rules newRules, boolean fill, String defaultValue) throws ArrayIndexOutOfBoundsException {
+        this(DimensionsInputDialog.showDialogWithDefault(defaultValue), newRules, fill);
+    }
+    
     LifeBoard(String dimensionMessage, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
-        this(DimensionsInputDialog.showDialog(dimensionMessage), newRules, fill);
+        this(DimensionsInputDialog.showDialogWithMessage(dimensionMessage), newRules, fill);
     }
     
     LifeBoard(int[] dimensions, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
