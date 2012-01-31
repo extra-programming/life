@@ -1,3 +1,6 @@
+/**A rule set where cells can be "Half Dead," denoted by being red
+ * @author Gavin Yancey
+ */
 import java.awt.Color;
 public class HalfDeadRules implements Rules
 {

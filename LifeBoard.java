@@ -120,6 +120,8 @@ class LifeBoard extends JPanel implements MouseListener {
                 }
             } // for y
         } // for x
+        wholePictureWidth = leftMargin + (cellsAcross * cellWidth) + leftMargin;
+        wholePictureHeight = topMargin + (cellsDown * cellHeight) + topMargin;
         addMouseListener(this);
         this.repaint( );
         //System.out.println( this.toString() );
@@ -194,10 +196,14 @@ class LifeBoard extends JPanel implements MouseListener {
         //First map the point to a cell location
         Point clickedCell = whichCell(whereClicked);
        
+        System.out.println("clicked on cell:"+clickedCell);
+        
         //Get the value that's currently in the cell
         int data = getCellData(clickedCell);
         //Increment the value while also keeping track of overflow.
-        data++;
+        //data++;
+        //use rules:
+        data=theRules.getCellStateFromClick(data);
         setCellData(clickedCell, data);
     }
     
@@ -232,7 +238,7 @@ class LifeBoard extends JPanel implements MouseListener {
             throw new ArrayIndexOutOfBoundsException("bad gridloc " + cellLoc + " in grid with width=" + cellsAcross + ", height=" + cellsDown);
             //return badPoint;
         } else {
-            return theRules.getCellState(theData[cellLoc.x][cellLoc.y]);
+            return theData[cellLoc.x][cellLoc.y];
         }
     } // getCellData( )
     
@@ -257,7 +263,7 @@ class LifeBoard extends JPanel implements MouseListener {
             
         //} else {
             // if  (theData[cellLoc.x][cellLoc.y] != newCellValue) {
-           theData[cellLoc.x][cellLoc.y] = theRules.getCellState(newCellValue%(theRules.getAcceptableCellStates().length));
+           theData[cellLoc.x][cellLoc.y] = newCellValue%(theRules.getAcceptableCellStates().length);
            this.repaint( );
            // }
         //}

@@ -1,5 +1,8 @@
-/**An interface that repersents the rules used in the game
- * you must register your rules class in static final LifeGame.rulesList */
+/**
+ * An interface that repersents the rules used in the game
+ * you must register your rules class in static final LifeGame.rulesList
+ * @author Gavin Yancey
+ */
 public interface Rules
 {
     /**@return the default cell state*/
