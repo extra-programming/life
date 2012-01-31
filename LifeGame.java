@@ -1,3 +1,7 @@
+// 
+// <applet code=LifeGame width=100 height=50>
+// </applet>
+//
 // file LifeBoard.java
 // For some reason bbedit file needs "Western (Mac OS Roman)" with "Mac (CR)" to compile with javac. (Maybe have to save as new file with utf16?)
 // Good: "Western (Mac OS Roman)" with "Mac (CR)"
@@ -21,7 +25,7 @@ import java.text.NumberFormat;
  * @author Mike Roam et al.
  */
 public class LifeGame extends JApplet implements Runnable /* was Applet */ {
-
+    public Component me;
     private static final long serialVersionUID = 42L;  // makes serializable happy
 
     static JFrame mikeFrame = null;  // gui window for standalone, containing everything
@@ -71,6 +75,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
      */
     public LifeGame( ) {
         myContentPane = this.getContentPane( );
+        me=this;
     } // end of default constructor
 
     public static void main(String args[]) throws Exception {
@@ -104,7 +109,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             myContentPane = getContentPane( );
         }
         /* Start life with a random board */
-        theBoard = new LifeBoard( new HalfDeadRules(),true );
+        theBoard = new LifeBoard(this, new HalfDeadRules(),true );
         this.buildGUI( );
     } // init( )
 
@@ -214,7 +219,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     
                     myContentPane.remove(theBoard);
 
-                    theBoard = new LifeBoard( selectedRules(),true, currentSize );
+                    theBoard = new LifeBoard( me,selectedRules(),true, currentSize );
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
@@ -236,7 +241,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     
                     myContentPane.remove(theBoard); 
                     
-                    theBoard = new LifeBoard( selectedRules(),false, currentSize ); //Should cache the previous board size
+                    theBoard = new LifeBoard( me, selectedRules(),false, currentSize ); //Should cache the previous board size
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
