@@ -71,7 +71,6 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
      */
     public LifeGame( ) {
         myContentPane = this.getContentPane( );
-        init( );
     } // end of default constructor
 
     public static void main(String args[]) throws Exception {
@@ -87,7 +86,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         }); 
          */
         frame.setSize( FRAMEWIDTH, FRAMEHEIGHT );
-        // myLifeGame.init( ); the constructor calls init!
+        // myLifeGame.init( ); the constructor calls init!   bad idea to call too much from constructor
+        myLifeGame.init();
         myLifeGame.start( ); // what's this??
         frame.pack();
         frame.setVisible(true);
