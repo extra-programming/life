@@ -25,7 +25,7 @@ import java.text.NumberFormat;
  * @author Mike Roam et al.
  */
 public class LifeGame extends JApplet implements Runnable /* was Applet */ {
-    public Component me;
+    public LifeGame me;
     private static final long serialVersionUID = 42L;  // makes serializable happy
 
     static JFrame mikeFrame = null;  // gui window for standalone, containing everything
@@ -66,7 +66,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
     JSlider delaySlider = null; /* is instantiated in buildDelayPanel( ) */
 
-    boolean running = false;
+    public boolean running = false;
 
     Thread stepperThread = new Thread(this);
 
@@ -214,6 +214,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         randomBoardBtn.addActionListener( new ActionListener() {
                 public void actionPerformed(ActionEvent e){
                     System.out.println("randomBoard");
+                    
+                    me.running = false;
                   
                     String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
                     
@@ -236,6 +238,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                 public void actionPerformed(ActionEvent e){
                     System.out.println("blankBoard");
                    
+                    
+                    me.running = false;
                     
                     String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
                     
@@ -297,6 +301,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                 //stepContinuouslyBtn.setText("Run");
                 // [ ] ?? we should have variable for what kind of stepping !! 
                 repaint();*/
+                    
+                me.running = false;
                 theBoard.setRules(selectedRules());
                 repaint();
         }
@@ -355,6 +361,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
     void newBoardFromFile(  ) {
         try {
+                    
+            this.running = false;
             myContentPane.remove(theBoard);
             theBoard = new LifeBoard( /* to find parent frame */ this );
             resize( theBoard.wholePictureWidth, theBoard.wholePictureHeight );
