@@ -104,23 +104,24 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     }
     
     public static void main(String args[]) throws Exception {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        /*UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         LifeGame myLifeGame = new LifeGame( );
         JFrame frame = new JFrame(" Life Game ");
         frame.getContentPane().add( myLifeGame );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        /* myLifeGame.addWindowListener( new WindowAdapter() {
-        public void windowClosing(WindowEvent e) {
-        System.exit(0);
-        }
-        }); 
-         */
+        // myLifeGame.addWindowListener( new WindowAdapter() {
+        //public void windowClosing(WindowEvent e) {
+        //System.exit(0);
+        //}
+        //}); 
+         
         frame.setSize( FRAMEWIDTH, FRAMEHEIGHT );
         // myLifeGame.init( ); the constructor calls init!   bad idea to call too much from constructor
         myLifeGame.init();
         myLifeGame.start( ); // what's this??
         frame.pack();
-        frame.setVisible(true);
+        frame.setVisible(true);*/
+        putInWindow(new LifeGame());
     } // main( )
 
     /**
