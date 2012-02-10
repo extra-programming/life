@@ -58,15 +58,15 @@ class LifeBoard extends JPanel implements MouseListener {
     int/*boolean*/[][] newData = null;
     Point badPoint =  new Point( -1, -1);  /* used in badLoc */
 
-    LifeBoard(Component parent, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
+    @Deprecated LifeBoard(Component parent, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
         this(DimensionsInputDialog.showDialog(parent), newRules, fill);
     }
     
-     LifeBoard(Component parent, Rules newRules, boolean fill, String defaultValue) throws ArrayIndexOutOfBoundsException {
+     @Deprecated LifeBoard(Component parent, Rules newRules, boolean fill, String defaultValue) throws ArrayIndexOutOfBoundsException {
         this(DimensionsInputDialog.showDialogWithDefault(parent, defaultValue), newRules, fill);
     }
     
-    LifeBoard(Component parent, String dimensionMessage, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
+    @Deprecated LifeBoard(Component parent, String dimensionMessage, Rules newRules, boolean fill) throws ArrayIndexOutOfBoundsException {
         this(DimensionsInputDialog.showDialogWithMessage(parent, dimensionMessage), newRules, fill);
     }
     
@@ -595,6 +595,7 @@ class LifeBoard extends JPanel implements MouseListener {
             //this.LifeBoard( 16, 16 ) ?? have to fill in a dud board, perhaps random?;
         }*/
         generationCount=0;
+        this.paintImmediately(this.getVisibleRect());
         this.repaint();
     } // getBoardFromFile
 
