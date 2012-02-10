@@ -1,6 +1,6 @@
 /**
- * An interface that repersents the rules used in the game
- * you must register your rules class in static final LifeGame.rulesList
+ * An interface that repersents the rules used in the game.  
+ * You must register your rules class in static final LifeGame.rulesList
  * @author Gavin Yancey
  */
 public interface Rules
@@ -21,6 +21,8 @@ public interface Rules
     /**used for reading the game from a file
      * @return the cell state represented by any charactor in a life file*/
     int getCellStateFromFile(char c);
+    /**used for saving the game in a file
+     * @return the charactor that would represent the cell state in a life file*/
     char getCellStateForFile(int cellState);
     /**used for changing the cell state when a cell is clicked on
      * @return the new cell state from a clicked cell*/
