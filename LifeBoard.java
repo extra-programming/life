@@ -147,6 +147,7 @@ class LifeBoard extends JPanel implements MouseListener {
     }
     
     public void setRules(Rules newRules){
+        if(theRules.getClass().equals(newRules.getClass())) return;
         theRules=newRules;
         for(int i=0;i<theData.length;i++){
             for(int j=0;j<theData[i].length;j++){
@@ -614,7 +615,7 @@ class LifeBoard extends JPanel implements MouseListener {
         mySB.append(cellsAcross);
         mySB.append(' ');
         mySB.append(cellsDown);
-        mySB.append('\n');
+        mySB.append(" \n");
         mySB.append("Rules:");
         mySB.append(theRules.getClass().getSimpleName());
         mySB.append('\n');

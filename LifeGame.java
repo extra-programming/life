@@ -398,6 +398,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             /* myContentPane.*/repaint();
         } catch( Exception ex ) {
             System.out.println( "Error '" + ex + "' while reading file" );
+            ex.printStackTrace();
         }
         repaint();
         //stepContinuouslyBtn.setText("Run");

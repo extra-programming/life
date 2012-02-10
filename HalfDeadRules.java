@@ -52,8 +52,12 @@ public class HalfDeadRules implements Rules
         }
     }
     public char getCellStateForFile(int cellState){
-        if(cellState==this.getDefaultCellState()) return '.';
-        else return Integer.toString(cellState).charAt(0);
+        switch(cellState){
+            case 0: return '.';
+            case 1: return 'a';
+            case 2: return 'A';
+        }
+        return '.';
     }
     public boolean initRule(){
         return true;
