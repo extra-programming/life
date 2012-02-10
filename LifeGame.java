@@ -84,6 +84,25 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         me=this;
     } // end of default constructor
 
+    public static void putInWindow(LifeGame lg) throws Exception{
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFrame frame = new JFrame(" Life Game ");
+        frame.getContentPane().add( lg );
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        /* myLifeGame.addWindowListener( new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+        System.exit(0);
+        }
+        }); 
+         */
+        frame.setSize( FRAMEWIDTH, FRAMEHEIGHT );
+        // myLifeGame.init( ); the constructor calls init!   bad idea to call too much from constructor
+        lg.init();
+        lg.start( ); // what's this??
+        frame.pack();
+        frame.setVisible(true);
+    }
+    
     public static void main(String args[]) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         LifeGame myLifeGame = new LifeGame( );
@@ -115,7 +134,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             myContentPane = getContentPane( );
         }
         /* Start life with a random board */
-        theBoard = new LifeBoard(this, new HalfDeadRules(),true );
+        theBoard = new LifeBoard(30, 30 , new HalfDeadRules(),true );
         this.buildGUI( );
     } // init( )
 
@@ -245,9 +264,12 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                   
                     String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
                     
+                    int[] newDimensions = DimensionsInputDialog.showDialog(me, currentSize);
+                    if(newDimensions==null) return;
+                    
                     myContentPane.remove(theBoard);
 
-                    theBoard = new LifeBoard( me,selectedRules(),true, currentSize );
+                    theBoard = new LifeBoard( newDimensions, selectedRules(),true );
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
@@ -256,7 +278,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     //myContentPane.repaint();
                     //stepContinuouslyBtn.setText("Run");
                     /** [ ] ?? we should have variable for what kind of stepping !! */
-                    repaint();
+                    me.repaint();
                 }
             }); // end of addActionListener
             
@@ -269,9 +291,12 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     
                     String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
                     
+                    int[] newDimensions = DimensionsInputDialog.showDialog(me, currentSize);
+                    if(newDimensions==null) return;
+                    
                     myContentPane.remove(theBoard); 
                     
-                    theBoard = new LifeBoard( me, selectedRules(),false, currentSize ); //Should cache the previous board size
+                    theBoard = new LifeBoard( newDimensions, selectedRules(),false); //Should cache the previous board size
                     theBoard.setBackground( Color.GREEN );
                     // no, bad! myContentPane.removeAll();
                     myContentPane.add( theBoard, BorderLayout.CENTER);
@@ -280,7 +305,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     //myContentPane.repaint();
                     //stepContinuouslyBtn.setText("Run");
                     /** [ ] ?? we should have variable for what kind of stepping !! */
-                    repaint();
+                    me.repaint();
                 }
             }); // end of addActionListener
 
@@ -313,26 +338,26 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             }); // end of addActionListener
             
         ruleChooser.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent ae){
-                System.out.println("ruleChooser");
-                /*myContentPane.remove(theBoard);
-
-                theBoard = new LifeBoard( 16, 16, selectedRules() );
-                theBoard.setBackground( Color.GREEN );
-                // no, bad! myContentPane.removeAll();
-                myContentPane.add( theBoard, BorderLayout.CENTER);
-                //theBoard.paintImmediately(theBoard.getVisibleRect());
-                myContentPane.validate();
-                //myContentPane.repaint();
-                //stepContinuouslyBtn.setText("Run");
-                // [ ] ?? we should have variable for what kind of stepping !! 
-                repaint();*/
-                    
-                me.stepContinuously(false);
-                theBoard.setRules(selectedRules());
-                repaint();
-        }
-        });
+                public void actionPerformed(ActionEvent ae){
+                    System.out.println("ruleChooser");
+                    /*myContentPane.remove(theBoard);
+                     * 
+                     * theBoard = new LifeBoard( 16, 16, selectedRules() );
+                     * theBoard.setBackground( Color.GREEN );
+                     * // no, bad! myContentPane.removeAll();
+                     * myContentPane.add( theBoard, BorderLayout.CENTER);
+                     * //theBoard.paintImmediately(theBoard.getVisibleRect());
+                     * myContentPane.validate();
+                     * //myContentPane.repaint();
+                     * //stepContinuouslyBtn.setText("Run");
+                     * // [ ] ?? we should have variable for what kind of stepping !! 
+                     * repaint();*/
+                     
+                     me.stepContinuously(false);
+                     theBoard.setRules(selectedRules());
+                     repaint();
+                    }
+            });
     } // addActionListenersToMyButtons( )
     
     public Rules selectedRules(){
@@ -375,7 +400,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     } /* buildDelayPanel( ) */
 
     /*
-    Don't sub-components automatically get painted? 
+    Don't sub-components automatically get painted?       yes they do
     public void paint( Graphics g ) {
     this.setVisible( true); // necessary??
     if ( theBoard != null ) {
