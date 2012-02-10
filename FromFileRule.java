@@ -1,21 +1,25 @@
 import java.awt.Color;
 import java.net.URL;
 import java.util.HashMap;
+
 /**
  * A Class that processes and represents a Rule loaded from a file
- * 
+ * Should I use a static method to return a new reference and read xml there or should I do that in RulesFromFile <--Leaning slightly toward this
+ * @see <a href="http://totheriver.com/learn/xml/xmltutorial.html">xml</a>
  * @author 1000000000 
  */
 public class FromFileRule implements Rules
 {
-    public int defaultCellState;
-    public int[] acceptableCellStates;
-    public Color[] cellColors;
-    public int[] neighborValues;
-    public HashMap<Character,Integer> charToCellStatesTable = new HashMap<Character,Integer>();
+    private int defaultCellState;
+    private int[] acceptableCellStates;
+    private Color[] cellColors;
+    private int[] neighborValues;
+    private HashMap<Character,Integer> charToCellStatesTable = new HashMap<Character,Integer>();
+    private HashMap<Integer,Integer> unsupportedCellStateConversionTable = new HashMap<Integer,Integer>();
     
     
     public FromFileRule(URL file) {
+        String input = ComponentUtil.readStringFromFile(file);
         
     }
     
@@ -46,7 +50,7 @@ public class FromFileRule implements Rules
     
     
     public int getCellState(int cellState) {
-        return 0;
+        return unsupportedCellStateConversionTable.get(cellState);
     }
     
     
@@ -55,4 +59,12 @@ public class FromFileRule implements Rules
     }
     
     public boolean loadRule() {return false;}
+    
+    public boolean isDataValid() {
+        return (acceptableCellStates != null && cellColors != null && isNeighborValuesValid());
+    }
+    
+    private boolean isNeighborValuesValid() {
+        return false;
+    }
 }
