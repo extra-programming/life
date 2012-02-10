@@ -241,7 +241,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                 public void actionPerformed(ActionEvent e){
                     System.out.println("randomBoard");
                     
-                    me.running = false;
+                    me.stepContinuously(false);
                   
                     String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
                     
@@ -265,7 +265,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                     System.out.println("blankBoard");
                    
                     
-                    me.running = false;
+                    me.stepContinuously(false);
                     
                     String currentSize = theBoard.cellsAcross.toString() + "," + theBoard.cellsDown.toString();
                     
@@ -328,7 +328,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                 // [ ] ?? we should have variable for what kind of stepping !! 
                 repaint();*/
                     
-                me.running = false;
+                me.stepContinuously(false);
                 theBoard.setRules(selectedRules());
                 repaint();
         }
@@ -388,7 +388,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     void newBoardFromFile(  ) {
         try {
                     
-            this.running = false;
+            this.stepContinuously(false);
             myContentPane.remove(theBoard);
             theBoard = new LifeBoard( /* to find parent frame */ this );
             resize( theBoard.wholePictureWidth, theBoard.wholePictureHeight );
@@ -408,7 +408,14 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
      * [Ã] ??? We should have variable, not use button name as flag!
      */
     void stepContinuously(){
-        if (running) {
+        stepContinuously(!running);
+    } /* stepContinuously( ) */
+    
+    /**
+     * change if the board is stepping or not
+     */
+    void stepContinuously(boolean run){
+        if (!run) {
             stepContinuouslyBtn.setText("Run");
             running = false;
         } else {
