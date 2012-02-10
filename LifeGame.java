@@ -20,6 +20,8 @@ import java.io.*;
 import java.applet.*;
 import javax.swing.event.*;
 import java.text.NumberFormat;
+import java.net.URI;
+import java.net.URL;
 
 /**
  * @author Mike Roam et al.
@@ -32,6 +34,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     /* static */ Container myContentPane = null; // for applets and standalone
     public static final int FRAMEWIDTH = 500;
     public static final int FRAMEHEIGHT = 500;
+    
+    private final JFileChooser fc = new JFileChooser();
     
     private static final String[] rulesList={
         "ConwayRules",
@@ -46,6 +50,8 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
 
     JButton getFileBtn = new JButton( "Get 'life' File..." );
     //Button getFileBtn = new Button( "Get 'life' File..." );
+    
+    JButton saveBoardBtn = new JButton( "Save Board" );
 
     JButton randomBoardBtn = new JButton( "Random Board" );
     //Button randomBoardBtn = new Button( "Random Board" );
@@ -140,10 +146,11 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         JPanel setupPanel = new JPanel();
         setupPanel.setBorder(BorderFactory.createEmptyBorder( /* TLRB */ 10, 10, 10, 10) );
         /* TLRB means "top, left, bot, right" */
-        setupPanel.setLayout(new GridLayout(/* rows (height) */ 3, /* cols (width) */ 1));
+        setupPanel.setLayout(new GridLayout(/* rows (height) */ 5, /* cols (width) */ 1));
         //paramPanel.setLayout( new FlowLayout() );
         setupPanel.setBackground( Color.BLUE );
         setupPanel.add( getFileBtn );
+        setupPanel.add( saveBoardBtn );
         setupPanel.add( randomBoardBtn );
         setupPanel.add( blankBoardBtn );
         setupPanel.add( ruleChooser );
@@ -184,7 +191,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     } // buildGUI( )
 
     void addActionListenersToMyButtons( ) {
-       /* this.addMouseListener (new MouseAdapter(){ //This has been moved to the lifeboard class. It should handle its own clicks.
+        /* this.addMouseListener (new MouseAdapter(){ //This has been moved to the lifeboard class. It should handle its own clicks.
                 public void mouseClicked(MouseEvent e){
                     int x = e.getX(), y = e.getY();
                     System.out.println("mouse clicked on "+x+", "+y);
@@ -208,6 +215,25 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
                         }
                     }
                     repaint();
+                }
+            }); // end of addActionListener
+            
+        saveBoardBtn.addActionListener( new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    System.out.println("saveBoardBtn");
+                    int returnVal = fc.showSaveDialog(me);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        File file = fc.getSelectedFile();
+                        try{
+                            file.delete();
+                            file.createNewFile();
+                        }catch(Exception exc){
+                            throw new RuntimeException(exc);
+                        }
+                        theBoard.makeFileFromBoard(file.getPath());
+                    } else {
+                        System.out.println("Open command cancelled by user.");
+                    }
                 }
             }); // end of addActionListener
 
@@ -354,7 +380,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     this.setVisible( true); // necessary??
     if ( theBoard != null ) {
     theBoard.paint( g );
-    // theBoard.repaint( ); // which is better??
+    // theBoard.repaint( ); // which is better??          use repaint, it just sets a "dirty flag", so it gets repainted soon
     }
     } // paint( )
      */
@@ -374,7 +400,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
             System.out.println( "Error '" + ex + "' while reading file" );
         }
         repaint();
-        stepContinuouslyBtn.setText("Run");
+        //stepContinuouslyBtn.setText("Run");
     } //newBoardFromFile
 
     /**

@@ -21,6 +21,7 @@ public interface Rules
     /**used for reading the game from a file
      * @return the cell state represented by any charactor in a life file*/
     int getCellStateFromFile(char c);
+    char getCellStateForFile(int cellState);
     /**used for changing the cell state when a cell is clicked on
      * @return the new cell state from a clicked cell*/
     int getCellStateFromClick(int cellState);

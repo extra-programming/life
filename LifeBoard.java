@@ -8,6 +8,7 @@ import java.awt.*;
 //import java.awt.event.*;
 import java.util.*; /* provides "Random( )" method */
 import java.net.URL;
+import java.io.*;
 
 
 /**
@@ -494,6 +495,23 @@ class LifeBoard extends JPanel implements MouseListener {
         return (c>='a'&&c<='z')||(c>='A'&&c<='Z');
     }
 
+    void makeFileFromBoard( String myFile ){
+        BufferedWriter out = null;
+        try{
+            FileWriter fstream = new FileWriter(myFile);
+            out = new BufferedWriter(fstream);
+            out.write(this.toString());
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }finally{
+            try{
+                out.close();
+            }catch(IOException ioe){
+                throw new RuntimeException(ioe);
+            }
+        }
+    }
+    
     /** 
     * This should use some java kind of split or parse to get the ints!
     */
@@ -592,7 +610,16 @@ class LifeBoard extends JPanel implements MouseListener {
      */
     public String toString() {
         StringBuilder mySB = new StringBuilder()/*Buffer( (cellsAcross + 1) * cellsDown )*/;
+        mySB.append("life ");
+        mySB.append(cellsAcross);
+        mySB.append(' ');
+        mySB.append(cellsDown);
+        mySB.append('\n');
+        mySB.append("Rules:");
+        mySB.append(theRules.getClass().getSimpleName());
+        mySB.append('\n');
         for ( int y = 0; y < cellsDown; ++y ) {
+            mySB.append( ':' );
             for ( int x = 0; x < cellsAcross; ++x ) {
                 /*if ( theData[x][y] == ALIVE1 ) {
                     mySB.append( 'A' );
@@ -601,8 +628,9 @@ class LifeBoard extends JPanel implements MouseListener {
                 } else {
                     mySB.append( '.' );
                 };*/
-                if(theData[x][y] == theRules.getDefaultCellState()) mySB.append('.');
-                else mySB.append(theData[x][y]);
+                //if(theData[x][y] == theRules.getDefaultCellState()) mySB.append('.');
+                //else mySB.append(theData[x][y]);
+                mySB.append(theRules.getCellStateForFile(theData[x][y]));
             };
             mySB.append( '\n' );
         };

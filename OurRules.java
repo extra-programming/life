@@ -45,6 +45,10 @@ public class OurRules implements Rules
             default: throw new IllegalArgumentException(c+" is not a valid input for OurRules");
         }
     }
+    public char getCellStateForFile(int cellState){
+        if(cellState==this.getDefaultCellState()) return '.';
+        else return Integer.toString(cellState).charAt(0);
+    }
     public boolean initRule(){
         return true;
     }

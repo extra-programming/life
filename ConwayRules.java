@@ -34,6 +34,10 @@ public class ConwayRules implements Rules
         if((c>'0' && c<='9') || (c>='A' && c<='Z')) return 1;
         throw new IllegalArgumentException(c+" is not a valid input for OurRules");
     }
+    public char getCellStateForFile(int cellState){
+        if(cellState==this.getDefaultCellState()) return '.';
+        else return Integer.toString(cellState).charAt(0);
+    }
     public boolean initRule(){
         return true;
     }
