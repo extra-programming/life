@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Applet1c extends JApplet {
 	public void init() {
-		getContentPane().add(new JLabel("Applet!"));
+		getContentPane().add(new JLabel("Hello World"));
 	} // init( )
 
 
