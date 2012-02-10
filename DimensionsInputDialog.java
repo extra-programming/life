@@ -11,12 +11,18 @@ public class DimensionsInputDialog
         return showDialog(parent, message, "30,30");
     }
     
+    static int[] showDialog(Component parent, String defaultValue){
+        return showDialogWithDefault(parent, defaultValue);
+    }
+    
     static int[] showDialogWithDefault(Component parent, String defaultValue){
         return showDialog(parent, "Please imput dimensions"+UsefulStrings.getLineSeparator()+"Input should be of the form # of cells in the X coordinate,# of cells in the Y coordinate.", defaultValue);
     }
     
     static int[] showDialog(Component parent, String message, String defaultValue){
-        String[] dimensions = JOptionPane.showInputDialog(message, defaultValue).split(",");
+        String d = JOptionPane.showInputDialog(message, defaultValue);
+        if(d==null) return null;
+        String[] dimensions = d.split(",");
         int[] rVal = null;
         try{
             rVal = new int[]{new Integer(dimensions[0]),new Integer(dimensions[1])};
