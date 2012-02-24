@@ -1,0 +1,29 @@
+/* How can I let my applet read and write text files? 
+
+Info about "policy files" is at 
+
+(java 2, oldish, might not have changed much:
+http://java.sun.com/developer/onlineTraining/Programming/BasicJava1/data.html
+
+(2004, policy in a jar, that your program reads and uses:)
+http://www.javakb.com/Uwe/Forum.aspx/java-security/606/Policy-file-in-a-Jar
+
+(oldish, how to sign applets with public keys:)
+http://java.sun.com/developer/onlineTraining/Programming/JDCBook/signed.html
+
+(problems with reflection and 
+http://stackoverflow.com/questions/5184284/illegalaccessexception-on-using-reflection
+
+
+--------- Policy File Sample:
+
+grant {
+  permission java.util.PropertyPermission 
+	"user.home", "read";
+  permission java.io.FilePermission 
+	"${user.home}/text.txt", "read,write";
+};
+
+
+
+*/
