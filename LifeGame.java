@@ -28,14 +28,14 @@ import java.net.URL;
  */
 public class LifeGame extends JApplet implements Runnable /* was Applet */ {
     public LifeGame me;
-    private static final long serialVersionUID = 42L;  // makes serializable happy
+    private static final long serialVersionUID = 127847834890178391L;  // makes serializable happy
 
     static JFrame mikeFrame = null;  // gui window for standalone, containing everything
     /* static */ Container myContentPane = null; // for applets and standalone
     public static final int FRAMEWIDTH = 500;
     public static final int FRAMEHEIGHT = 500;
     
-    private final JFileChooser fc = new JFileChooser();
+    private final JFileChooser fc; // = new JFileChooser();
     
     private static final String[] rulesList={
         "ConwayRules",
@@ -80,12 +80,13 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
      * default constructor, called by main
      */
     public LifeGame( ) {
+        fc = new JFileChooser();
         myContentPane = this.getContentPane( );
         me=this;
     } // end of default constructor
 
     public static void putInWindow(LifeGame lg) throws Exception{
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFrame frame = new JFrame(" Life Game ");
         frame.getContentPane().add( lg );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -128,7 +129,7 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
      * For starting up Applet
      * (Also called by main and constructor so standalone acts like applet)
      */
-    public void init( ) {
+    public void init( ){
         //      myContentPane.add( "Center", this ); // necessary?
         if (myContentPane == null) {
             //          // so I guess we're an applet
@@ -136,7 +137,16 @@ public class LifeGame extends JApplet implements Runnable /* was Applet */ {
         }
         /* Start life with a random board */
         theBoard = new LifeBoard(30, 30 , new HalfDeadRules(),true );
-        this.buildGUI( );
+        final LifeGame me = this;
+        try{
+            java.security.AccessController.doPrivileged(new java.security.PrivilegedExceptionAction() {
+                public Object run() throws Exception {
+                    me.buildGUI( );
+                    return null;
+                }
+            });
+        }catch(Exception e){e.printStackTrace();System.exit(1);}
+        //this.buildGUI( );
     } // init( )
 
     public int getBoardX(int x){
