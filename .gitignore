@@ -3,5 +3,4 @@
 *.class
 .*
 doc/*
-*.lfr
 bluej.pkg
