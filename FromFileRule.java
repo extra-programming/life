@@ -10,17 +10,20 @@ import java.util.HashMap;
  */
 public class FromFileRule implements Rules
 {
+    private String name;
     private int defaultCellState;
-    private int[] acceptableCellStates;
-    private Color[] cellColors;
-    private int[] neighborValues;
-    private HashMap<Character,Integer> charToCellStatesTable = new HashMap<Character,Integer>();
-    private HashMap<Integer,Integer> unsupportedCellStateConversionTable = new HashMap<Integer,Integer>();
+    private int[] acceptableCellStates; //Do we really need this it is the key set of most of our HashMaps
+    private HashMap<Integer,Color> cellStateColors = new HashMap<Integer,Color>();
+    private HashMap<Integer,Integer> cellStateNeighborVals = new HashMap<Integer,Integer>();
+    private HashMap<Character,Integer> readTable = new HashMap<Character,Integer>();
+    private HashMap<Integer,Integer> ruleConversionTable = new HashMap<Integer,Integer>();
+    //would it be better to use Arrays and have one HashMap as a sort of phonebook for the Array vaules?
     
+    private FromFileRule() {}
     
-    public FromFileRule(URL file) {
-        String input = ComponentUtil.readStringFromFile(file);
-        
+    public static FromFileRule loadRuleFile(URL ruleFile) {
+        System.err.println("Unimplemented");
+        return null;
     }
     
     
@@ -35,12 +38,12 @@ public class FromFileRule implements Rules
     
     
     public Color getCellColor(int cellState) {
-        return cellColors[cellState];
+        return cellStateColors.get(cellState);
     }
     
     
     public int getNeighborValue(int cellState) {
-        return neighborValues[cellState];
+        return cellStateNeighborVals.get(cellState);
     }
     
     
@@ -50,21 +53,25 @@ public class FromFileRule implements Rules
     
     
     public int getCellState(int cellState) {
-        return unsupportedCellStateConversionTable.get(cellState);
+        return ruleConversionTable.get(cellState);
     }
     
     
     public int readCellState(char c) {
-        return charToCellStatesTable.get(c);
+        return readTable.get(c);
     }
     
     public boolean loadRule() {return false;}
     
     public boolean isDataValid() {
-        return (acceptableCellStates != null && cellColors != null && isNeighborValuesValid());
+        return (acceptableCellStates != null && cellStateColors.size() == acceptableCellStates.length && isNeighborValuesValid());
     }
     
     private boolean isNeighborValuesValid() {
         return false;
+    }
+    
+    public String toString() {
+        return name;
     }
 }

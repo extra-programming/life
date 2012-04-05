@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rule>
+	<name>Conway Rules Test</name>
+	<cell_states>
+		<cell_state>
+			<default />
+			<value>0</value>
+			<neighbor_value>0</neighbor_value>
+			<char_conversion>0.xoOX*,-</char_conversion>
+			<color>
+				<r>0</r>
+				<g>0</g>
+				<b>0</b>
+			</color>
+			<rule_conversion>
+				<conversion>t</conversion>
+				<!-- t stands for whatever the default cell state of the rule that we are converting from -->
+			</rule_conversion>
+			<cell_interactions>
+				<interaction>
+					<neighbors>3</neighbors>
+					<result>1</result>
+				</interaction>
+				<interaction>
+					<neighbors>d</neighbors>
+					<!-- Note the "d" in neighbors is for default ie what it will do if none of the other interaction's conditions apply -->
+					<result>0</result>
+				</interaction>
+			</cell_interactions>
+		</cell_state>
+		<cell_state>
+			<value>1</value>
+			<neighbor_value>1</neighbor_value>
+			<char_conversion>1/+</char_conversion>
+			<color>
+				<r>255</r>
+				<g>255</g>
+				<b>255</b>
+			</color>
+			<rule_conversion>
+				<conversion>d</conversion>
+				<!-- same idea as with d in interaction -->
+			</rule_conversion>
+			<cell_interactions>
+				<interaction>
+					<neighbors>2-4</neighbors>
+					<result>1</result>
+				</interaction>
+				<interaction>
+					<neighbors>d</neighbors>
+					<result>0</result>
+				</interaction>
+			</cell_interactions>
+		</cell_state>
+	</cell_states>
+</rule>

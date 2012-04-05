@@ -55,7 +55,8 @@ public class RulesFromFile implements Rules
         if(loadedRules.indexOf(choice) == -1) {
             URL file = ComponentUtil.getSomeOldFile(null);
             if(file == null) return false;
-            choice = new FromFileRule(file);
+            choice = FromFileRule.loadRuleFile(file);
+            if(choice == null) return false;
             loadedRules.add((FromFileRule)choice);
         }
         rulePointer = loadedRules.indexOf(choice);
