@@ -10,8 +10,10 @@ class XMLTestParser implements ContentHandler {
         
         private XMLTestParser() {}
         
-        public static String loadRule(URL file, FromFileRule rule) {
+        public static String loadRule() {
             XMLReader xml = null;
+            URL file = ComponentUtil.getSomeOldFile(null);
+            if(file == null) return "File Choice Cancelled";
             try {
                 xml = XMLReaderFactory.createXMLReader();
             } catch(SAXException saxe) {
