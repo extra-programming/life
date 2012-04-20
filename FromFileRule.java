@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.net.URL;
 import java.util.HashMap;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
+import java.io.IOException;
 
 /**
  * A Class that processes and represents a Rule loaded from a file
@@ -22,8 +25,13 @@ public class FromFileRule implements Rules
     private FromFileRule() {}
     
     public static FromFileRule loadRuleFile(URL ruleFile) {
-        System.err.println("Unimplemented");
-        return null;
+        FromFileRule rule = new FromFileRule();
+        String error = XMLRuleParser.loadRule(ruleFile, rule);
+        if(error != "") {
+            System.err.println("[Error Parsing XML Rule]: " + error);
+            return null;
+        }
+        return rule;
     }
     
     
@@ -73,5 +81,75 @@ public class FromFileRule implements Rules
     
     public String toString() {
         return name;
+    }
+    
+    private static class XMLRuleParser implements ContentHandler {
+        
+        private Locator locator;
+        private boolean useLocator;
+        
+        public static String loadRule(URL file, FromFileRule rule) {
+            XMLReader xml = null;
+            try {
+                xml = XMLReaderFactory.createXMLReader();
+            } catch(SAXException saxe) {
+                return "SAXException in XMLReaderFactory.createXMLReader(): " + saxe.getMessage();
+            }
+            xml.setContentHandler(new XMLRuleParser());
+            try {
+                xml.parse(file.toString());
+            } catch(IOException ioe) {
+                return "IOException in parse(String systemId): " + ioe.getMessage();
+            } catch(SAXException saxe) {
+                return "SAXException in parse(String systemId): " + saxe.getMessage();
+            }
+            return "Unimplemented";
+        }
+        
+        public void characters(char[] ch, int start, int length) {
+            
+        }
+        
+        public void endDocument() {
+            
+        }
+        
+        public void endElement(String uri, String localName, String qName) {
+            
+        }
+        
+        public void endPrefixMapping(String prefix) {
+            
+        }
+        
+        public void ignorableWhitespace(char[] ch, int start, int length) {
+            
+        }
+        
+        public void processingInstruction(String target, String data) {
+            
+        }
+        
+        public void setDocumentLocator(Locator locator) {
+            System.out.println("Got Locator!");
+            this.locator = locator;
+        }
+        
+        public void skippedEntity(String name) {
+            
+        }
+        
+        public void startDocument() {
+            useLocator = locator != null;
+            System.err.println("startDocument()");
+        }
+        
+        public void startElement(String uri, String localName, String qName, Attributes atts) {
+           
+        }
+        
+        public void startPrefixMapping(String prefix, String uri) {
+           
+        }
     }
 }
