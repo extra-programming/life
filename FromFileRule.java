@@ -88,6 +88,7 @@ public class FromFileRule implements Rules
         
         private Locator locator;
         private boolean useLocator;
+        private String path = "/"
         
         public static String loadRule(URL file, FromFileRule rule) {
             XMLReader xml = null;
@@ -107,8 +108,20 @@ public class FromFileRule implements Rules
             return "Unimplemented";
         }
         
-        public void characters(char[] ch, int start, int length) {
+        private void reportStartElement(String localName) {
             
+        }
+        
+        private void reportChars(String chars) {
+            
+        }
+        
+        private void reportEndElement(String localName) {
+            
+        }
+        
+        public void characters(char[] ch, int start, int length) {
+            reportChars(new String(ch,start,length);
         }
         
         public void endDocument() {
