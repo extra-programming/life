@@ -16,18 +16,26 @@ public class FromFileRule implements Rules
 {
     private String name;
     private int defaultCellState;
-    private int[] acceptableCellStates; //Do we really need this it is the key set of most of our HashMaps
-    private HashMap<Integer,Color> cellStateColors = new HashMap<Integer,Color>();
-    private HashMap<Integer,Integer> cellStateNeighborVals = new HashMap<Integer,Integer>();
+    
     private HashMap<Character,Integer> readTable = new HashMap<Character,Integer>();
     private HashMap<Integer,Integer> ruleConversionTable = new HashMap<Integer,Integer>();
     //would it be better to use Arrays and have one HashMap as a sort of phonebook for the Array vaules?
+    
+    private int[] acceptableCellStates; //Do we really need this it is the key set of most of our HashMaps
+    private HashMap<Integer,Color> cellStateColors = new HashMap<Integer,Color>();
+    private HashMap<Integer,Integer> cellStateNeighborVals = new HashMap<Integer,Integer>();
+    
+    /*private HashMap<Integer,Integer> cellStates = new HashMap<Integer,Integer>(); // Used to get "address" of a particular cell state for use in cellStateColors and 
+    private Color[] cellStateColors;
+    private int[] cellStateNeighborVals;*/
+    
     
     private FromFileRule() {}
     
     public static FromFileRule loadRuleFile(URL ruleFile) {
         FromFileRule rule = new FromFileRule();
-        String error = XMLRuleParser.loadRule(ruleFile, rule);
+        XMLRuleParser parser = new XMLRuleParser();
+        String error = parser.loadRule(ruleFile, rule);
         if(error != "") {
             System.err.println("[Error Parsing XML Rule]: " + error);
             return null;
@@ -72,7 +80,7 @@ public class FromFileRule implements Rules
     
     public boolean loadRule() {return false;}
     
-    public boolean isDataValid() {
+    private boolean isDataValid() {
         return (acceptableCellStates != null && cellStateColors.size() == acceptableCellStates.length && isNeighborValuesValid());
     }
     
@@ -88,9 +96,11 @@ public class FromFileRule implements Rules
         
         private Locator locator;
         private boolean useLocator;
-        private String path = "/";
+        private String path = "";
+        private FromFileRule rule;
         
-        public static String loadRule(URL file, FromFileRule rule) {
+        
+        public String loadRule(URL file, FromFileRule rule) {
             XMLReader xml = null;
             try {
                 xml = XMLReaderFactory.createXMLReader();
@@ -109,7 +119,7 @@ public class FromFileRule implements Rules
         }
         
         private void reportStartElement(String localName) {
-            
+            path += "/" + localName;
         }
         
         private void reportChars(String chars) {
@@ -117,7 +127,7 @@ public class FromFileRule implements Rules
         }
         
         private void reportEndElement(String localName) {
-            
+            path = path.substring(0, path.length() - localName.length());
         }
         
         public void characters(char[] ch, int start, int length) {
@@ -129,7 +139,7 @@ public class FromFileRule implements Rules
         }
         
         public void endElement(String uri, String localName, String qName) {
-            
+            reportEndElement(localName);
         }
         
         public void endPrefixMapping(String prefix) {
@@ -159,11 +169,15 @@ public class FromFileRule implements Rules
         }
         
         public void startElement(String uri, String localName, String qName, Attributes atts) {
-           
+           reportStartElement(localName);
         }
         
         public void startPrefixMapping(String prefix, String uri) {
            
+        }
+        
+        private boolean hasCharacterData() {
+            return false;
         }
     }
 }
