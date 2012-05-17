@@ -4,3 +4,4 @@
 .*
 doc/*
 bluej.pkg
+*.java~
