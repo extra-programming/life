@@ -15,15 +15,16 @@ import java.io.IOException;
 public class FromFileRule implements Rules
 {
     private String name;
-    private int defaultCellState;
+    private CellStateGroup 
+    //private int defaultCellState;
     
-    private HashMap<Character,Integer> readTable = new HashMap<Character,Integer>();
-    private HashMap<Integer,Integer> ruleConversionTable = new HashMap<Integer,Integer>();
+    /*private HashMap<Character,Integer> readTable = new HashMap<Character,Integer>();
+    private HashMap<Integer,Integer> ruleConversionTable = new HashMap<Integer,Integer>();*/
     //would it be better to use Arrays and have one HashMap as a sort of phonebook for the Array vaules?
     
-    private int[] acceptableCellStates; //Do we really need this it is the key set of most of our HashMaps
+    /*private int[] acceptableCellStates; //Do we really need this it is the key set of most of our HashMaps
     private HashMap<Integer,Color> cellStateColors = new HashMap<Integer,Color>();
-    private HashMap<Integer,Integer> cellStateNeighborVals = new HashMap<Integer,Integer>();
+    private HashMap<Integer,Integer> cellStateNeighborVals = new HashMap<Integer,Integer>();*/
     
     /*private HashMap<Integer,Integer> cellStates = new HashMap<Integer,Integer>(); // Used to get "address" of a particular cell state for use in cellStateColors and 
     private Color[] cellStateColors;
